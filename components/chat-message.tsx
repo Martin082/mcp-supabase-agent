@@ -59,13 +59,16 @@ export function ChatMessage({ role, content, toolInvocations }: MessageProps) {
                     const isResult = tool.state === 'result';
                     if (!isResult) return null;
 
+                    // ONLY render results for the execute_sql tool.
+                    // Discovery tools like read_schema_overview should remain hidden.
+                    if (tool.toolName !== 'execute_sql') return null;
+
                     let resultData = tool.result;
                     try {
                         if (typeof resultData === 'string') resultData = JSON.parse(resultData);
                     } catch (e) { }
 
-                    // Only show the table if it's a list (array) with more than 1 item OR a list with many columns.
-                    // If it's just one object, the AI will handle it in the natural language summary.
+                    // Only show the table if it's a list (array) with more than 1 item OR a complex object.
                     const isList = Array.isArray(resultData) && resultData.length > 1;
                     const isComplexObject = Array.isArray(resultData) && resultData.length === 1 && Object.keys(resultData[0]).length > 3;
 
