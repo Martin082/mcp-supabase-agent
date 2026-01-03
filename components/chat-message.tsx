@@ -51,53 +51,13 @@ function DynamicTable({ data }: { data: any[] }) {
 
 export function ChatMessage({ role, content, toolInvocations }: MessageProps) {
 
-    // Handle tool results specifically
+    // Handle assistant messages with tool calls
     if (role === 'assistant' && toolInvocations && toolInvocations.length > 0) {
         return (
             <div className="flex flex-col gap-2 w-full max-w-4xl mx-auto py-6 px-4">
-                {toolInvocations.map((tool, index) => {
-                    const isResult = tool.state === 'result';
-
-                    if (isResult) {
-                        const toolName = tool.toolName;
-                        let resultData = tool.result;
-
-                        try {
-                            if (typeof resultData === 'string') {
-                                resultData = JSON.parse(resultData);
-                            }
-                        } catch (e) {
-                            // Leave as is
-                        }
-
-                        // Special rendering for SQL results (arrays of objects)
-                        if (Array.isArray(resultData) && resultData.length > 0 && typeof resultData[0] === 'object') {
-                            return (
-                                <div key={tool.toolCallId} className="space-y-2">
-                                    <div className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-widest">
-                                        Data Source: {toolName}
-                                    </div>
-                                    <DynamicTable data={resultData} />
-                                </div>
-                            );
-                        }
-
-                        // Fallback for other tool results (e.g. error messages or simple strings)
-                        return (
-                            <div key={tool.toolCallId} className="bg-muted/30 border border-border/50 rounded-lg p-3 text-xs font-mono text-muted-foreground overflow-auto whitespace-pre-wrap">
-                                <span className="text-primary/70">{toolName}:</span> {typeof resultData === 'string' ? resultData : JSON.stringify(resultData, null, 2)}
-                            </div>
-                        );
-                    }
-
-                    return (
-                        <div key={tool.toolCallId} className="flex items-center gap-2 text-xs text-muted-foreground/60 animate-pulse">
-                            <div className="h-1.5 w-1.5 rounded-full bg-primary/40" />
-                            <span>Processing {tool.toolName}...</span>
-                        </div>
-                    );
-                })}
-
+                {/* 
+                   We hide the tool execution steps to show ONLY the final natural language answer.
+                */}
                 {content && (
                     <div className="prose dark:prose-invert prose-p:text-foreground/90 prose-headings:text-foreground max-w-none pt-2">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
