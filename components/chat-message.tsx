@@ -50,12 +50,13 @@ function DynamicTable({ data }: { data: any[] }) {
 }
 
 export function ChatMessage({ role, content, toolInvocations }: MessageProps) {
+    const isAssistantWithTools = role === 'assistant' && toolInvocations && toolInvocations.length > 0;
 
-    // Handle assistant messages with tool calls
-    if (role === 'assistant' && toolInvocations && toolInvocations.length > 0) {
-        let hasTable = false;
+    let renderedTools = null;
+    let hasTable = false;
 
-        const renderedTools = toolInvocations.map((tool) => {
+    if (isAssistantWithTools) {
+        renderedTools = toolInvocations.map((tool: any) => {
             const isResult = tool.state === 'result';
             if (!isResult || tool.toolName !== 'execute_sql') return null;
 
@@ -74,22 +75,6 @@ export function ChatMessage({ role, content, toolInvocations }: MessageProps) {
 
             return null;
         });
-
-        return (
-            <div className="flex flex-col gap-2 w-full max-w-4xl mx-auto py-6 px-4">
-                {renderedTools}
-
-                {/* 
-                   STRICT RULE: If a table was already rendered, NEVER show the text content.
-                   This prevents duplicate results (table + text list) as requested by the user.
-                */}
-                {!hasTable && content && (
-                    <div className="prose dark:prose-invert prose-p:text-foreground/90 prose-headings:text-foreground max-w-none pt-2">
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
-                    </div>
-                )}
-            </div>
-        )
     }
 
     return (
@@ -106,11 +91,15 @@ export function ChatMessage({ role, content, toolInvocations }: MessageProps) {
                 {role === "user" ? "U" : "AI"}
             </div>
             <div className="flex-1 space-y-2 overflow-hidden min-w-0">
-                <div className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 max-w-none">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {content}
-                    </ReactMarkdown>
-                </div>
+                {isAssistantWithTools && renderedTools}
+
+                {(!hasTable || !isAssistantWithTools) && content && (
+                    <div className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 max-w-none">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {content}
+                        </ReactMarkdown>
+                    </div>
+                )}
             </div>
         </div>
     );
