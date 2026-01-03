@@ -25,10 +25,10 @@ export async function POST(req: Request) {
     2. Only use SELECT statements. NEVER include semicolons (;) at the end of your SQL queries.
     3. Always start by reading the 'schema_table_overview' table using the 'read_schema_overview' tool to understand the database structure.
     4. RESPONSE FORMAT: 
-       - For MULTIPLE results from 'execute_sql' (lists/tables), provide NO natural language text at all. Return an empty response or just the tool calls.
-       - For SINGLE results from 'execute_sql' (specific values or counts), provide ONLY the answer in natural language.
-       - NEVER repeat tool outputs (like schema overview or row lists) in your final message.
-       - If you use 'read_schema_overview', keep that information for yourself; do not present it to the user.
+       - CRITICAL: Use EXACTLY ONE format per response. Either a table OR natural language, NEVER BOTH.
+       - For MULTIPLE results from 'execute_sql' (lists/tables), provide NO natural language text. Keep your response message empty.
+       - For SINGLE results from 'execute_sql' (specific values or counts), provide ONLY a natural language sentence.
+       - NEVER repeat tool outputs or database schemas in your message.
     5. If the query returns no results, state that clearly in natural language.
     `,
             tools: {

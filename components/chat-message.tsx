@@ -53,33 +53,37 @@ export function ChatMessage({ role, content, toolInvocations }: MessageProps) {
 
     // Handle assistant messages with tool calls
     if (role === 'assistant' && toolInvocations && toolInvocations.length > 0) {
+        let hasTable = false;
+
+        const renderedTools = toolInvocations.map((tool) => {
+            const isResult = tool.state === 'result';
+            if (!isResult || tool.toolName !== 'execute_sql') return null;
+
+            let resultData = tool.result;
+            try {
+                if (typeof resultData === 'string') resultData = JSON.parse(resultData);
+            } catch (e) { }
+
+            const isList = Array.isArray(resultData) && resultData.length > 1;
+            const isComplexObject = Array.isArray(resultData) && resultData.length === 1 && Object.keys(resultData[0]).length > 3;
+
+            if (isList || isComplexObject) {
+                hasTable = true;
+                return <DynamicTable key={tool.toolCallId} data={resultData} />;
+            }
+
+            return null;
+        });
+
         return (
             <div className="flex flex-col gap-2 w-full max-w-4xl mx-auto py-6 px-4">
-                {toolInvocations.map((tool) => {
-                    const isResult = tool.state === 'result';
-                    if (!isResult) return null;
+                {renderedTools}
 
-                    // ONLY render results for the execute_sql tool.
-                    // Discovery tools like read_schema_overview should remain hidden.
-                    if (tool.toolName !== 'execute_sql') return null;
-
-                    let resultData = tool.result;
-                    try {
-                        if (typeof resultData === 'string') resultData = JSON.parse(resultData);
-                    } catch (e) { }
-
-                    // Only show the table if it's a list (array) with more than 1 item OR a complex object.
-                    const isList = Array.isArray(resultData) && resultData.length > 1;
-                    const isComplexObject = Array.isArray(resultData) && resultData.length === 1 && Object.keys(resultData[0]).length > 3;
-
-                    if (isList || isComplexObject) {
-                        return <DynamicTable key={tool.toolCallId} data={resultData} />;
-                    }
-
-                    return null;
-                })}
-
-                {content && (
+                {/* 
+                   STRICT RULE: If a table was already rendered, NEVER show the text content.
+                   This prevents duplicate results (table + text list) as requested by the user.
+                */}
+                {!hasTable && content && (
                     <div className="prose dark:prose-invert prose-p:text-foreground/90 prose-headings:text-foreground max-w-none pt-2">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
                     </div>
