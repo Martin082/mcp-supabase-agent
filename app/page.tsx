@@ -50,7 +50,7 @@ export default function Chat() {
                     />
                 ))}
 
-                {isLoading && (
+                {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
                     <div className="flex items-center gap-2 p-4 text-sm text-muted-foreground animate-pulse">
                         <span className="w-2 h-2 rounded-full bg-blue-500 animate-bounce" />
                         <span>Thinking...</span>
