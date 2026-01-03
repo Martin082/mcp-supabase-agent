@@ -55,9 +55,27 @@ export function ChatMessage({ role, content, toolInvocations }: MessageProps) {
     if (role === 'assistant' && toolInvocations && toolInvocations.length > 0) {
         return (
             <div className="flex flex-col gap-2 w-full max-w-4xl mx-auto py-6 px-4">
-                {/* 
-                   We hide the tool execution steps to show ONLY the final natural language answer.
-                */}
+                {toolInvocations.map((tool) => {
+                    const isResult = tool.state === 'result';
+                    if (!isResult) return null;
+
+                    let resultData = tool.result;
+                    try {
+                        if (typeof resultData === 'string') resultData = JSON.parse(resultData);
+                    } catch (e) { }
+
+                    // Only show the table if it's a list (array) with more than 1 item OR a list with many columns.
+                    // If it's just one object, the AI will handle it in the natural language summary.
+                    const isList = Array.isArray(resultData) && resultData.length > 1;
+                    const isComplexObject = Array.isArray(resultData) && resultData.length === 1 && Object.keys(resultData[0]).length > 3;
+
+                    if (isList || isComplexObject) {
+                        return <DynamicTable key={tool.toolCallId} data={resultData} />;
+                    }
+
+                    return null;
+                })}
+
                 {content && (
                     <div className="prose dark:prose-invert prose-p:text-foreground/90 prose-headings:text-foreground max-w-none pt-2">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>

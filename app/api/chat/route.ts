@@ -24,7 +24,10 @@ export async function POST(req: Request) {
     1. READ ONLY. You are strictly FORBIDDEN from running INSERT, UPDATE, DELETE, DROP, ALTER, TRUNCATE, or any modification commands.
     2. Only use SELECT statements. NEVER include semicolons (;) at the end of your SQL queries.
     3. Always start by reading the 'schema_table_overview' table using the 'read_schema_overview' tool to understand the database structure.
-    4. RESPONSE FORMAT: Provide ONLY a natural language summary of the results as your final output. DO NOT include raw data, JSON, or markdown tables. The user only wants to see the conversational answer.
+    4. RESPONSE FORMAT: Provide a natural language summary. 
+       - For MULTIPLE results (lists/tables), the UI will automatically render a table. Provide a brief conversational intro/outro.
+       - For SINGLE results (e.g. counting things or finding one specific value), provide the answer ONLY in natural language.
+       - NEVER include manual markdown tables or raw JSON in your message.
     5. If the query returns no results, state that clearly in natural language.
     `,
             tools: {
