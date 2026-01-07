@@ -64,15 +64,15 @@ export async function POST(req: Request) {
         const result = streamText({
             model: openai('gpt-4o-mini'),
             messages,
-            maxSteps: 10,
+            maxSteps: 15,
             system: `You are a helpful SQL assistant for a Supabase project.
     Your goal is to answer user questions by querying the database.
     
     Current Date and Time: ${new Date().toUTCString()}
     
     CRITICAL RULE: NEVER GUESS schema details. Hallucinations are strictly forbidden.
-    1. SCHEMA FIRST: You MUST call 'get_schema' for EVERY table you intend to query, unless you have already called it for that specific table in this conversation.
-    2. ALWAYS start by reading the 'schema_table_overview' table using the 'read_schema_overview' tool.
+    1. SCHEMA FIRST: ALWAYS start by calling the 'read_schema_overview' tool. This provides a compact overview of all tables and their columns.
+    2. TARGETED DRILL-DOWN: Use 'get_schema' ONLY if 'read_schema_overview' is missing information for a specific table you need to query.
     
     DATABASE RULES:
     1. READ ONLY. You are strictly FORBIDDEN from running INSERT, UPDATE, DELETE, DROP, ALTER, TRUNCATE, or any modification commands.
@@ -137,7 +137,7 @@ export async function POST(req: Request) {
                     },
                 }),
                 get_schema: tool({
-                    description: 'Get the schema definition for a specific table. MANDATORY before querying any table.',
+                    description: 'Get the detailed schema definition for a specific table. Use this only if read_schema_overview is insufficient.',
                     parameters: z.object({
                         table: z.string().describe('The table name to get schema for'),
                     }),
@@ -169,11 +169,12 @@ export async function POST(req: Request) {
                         console.log("Executing tool: execute_sql", query);
                         if (!supabaseUrl || !supabaseKey) return "Error: Credentials missing.";
 
-                        const lowerQuery = query.trim().toLowerCase();
-
                         // Security Check 1: Must be a read-type statement
-                        if (!lowerQuery.startsWith('select') && !lowerQuery.startsWith('with') && !lowerQuery.startsWith('values')) {
-                            return "Error: Only SELECT statements are allowed.";
+                        // Remove comments and leading whitespace for accurate check
+                        const cleanQuery = query.replace(/\/\*[\s\S]*?\*\/|--.*$/gm, '').trim().toLowerCase();
+
+                        if (!cleanQuery.startsWith('select') && !cleanQuery.startsWith('with') && !cleanQuery.startsWith('values')) {
+                            return "Error: Only SELECT statements are allowed. (Received: " + cleanQuery.substring(0, 20) + "...)";
                         }
 
                         // Security Check 2: No stacked queries (semicolons)
