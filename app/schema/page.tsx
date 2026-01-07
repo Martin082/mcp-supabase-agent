@@ -58,7 +58,10 @@ export default async function SchemaPage() {
                 </div>
                 <div>
                     <h1 className="text-2xl font-bold tracking-tight">Database Schema</h1>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
+                        This is the schema of the database of this app. Here you can see what type of info it contains so you know what type of questions it can answer.
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-2">
                         Exploring <span className="font-mono text-primary">{tableNames.length}</span> public tables
                     </p>
                 </div>
