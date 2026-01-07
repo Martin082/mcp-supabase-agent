@@ -29,7 +29,7 @@ export function MobileShell({ children }: { children: React.ReactNode }) {
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute top-6 right-8 text-muted-foreground hover:bg-white/5 rounded-full"
+                        className="absolute top-6 right-8 text-muted-foreground hover:bg-accent rounded-full"
                         onClick={() => setIsOpen(false)}
                     >
                         <X className="h-6 w-6" />
