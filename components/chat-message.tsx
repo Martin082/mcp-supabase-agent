@@ -56,6 +56,14 @@ export function ChatMessage({ role, content, toolInvocations }: MessageProps) {
     let hasTable = false;
 
     if (isAssistantWithTools) {
+        // Detect if any execute_sql tool has returned a table-worthy result
+        hasTable = toolInvocations.some((tool: any) => {
+            if (tool.state !== 'result' || tool.toolName !== 'execute_sql') return false;
+            let data = tool.result;
+            try { if (typeof data === 'string') data = JSON.parse(data); } catch (e) { return false; }
+            return Array.isArray(data) && (data.length > 1 || (data.length === 1 && Object.keys(data[0]).length > 3));
+        });
+
         renderedTools = toolInvocations.map((tool: any) => {
             const isResult = tool.state === 'result';
             if (!isResult || tool.toolName !== 'execute_sql') return null;
@@ -69,7 +77,6 @@ export function ChatMessage({ role, content, toolInvocations }: MessageProps) {
             const isComplexObject = Array.isArray(resultData) && resultData.length === 1 && Object.keys(resultData[0]).length > 3;
 
             if (isList || isComplexObject) {
-                hasTable = true;
                 return <DynamicTable key={tool.toolCallId} data={resultData} />;
             }
 

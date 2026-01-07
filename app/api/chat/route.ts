@@ -80,11 +80,9 @@ export async function POST(req: Request) {
     
     RESPONSE FORMAT: 
     - CRITICAL: Use EXACTLY ONE format per response. Either a table OR natural language, NEVER BOTH.
-    - FOR MULTIPLE RESULTS (2+ rows): Your message body MUST be completely empty. Provide NO natural language.
-    - FOR SINGLE VALUES OR COUNTS (1 row): Provide ONLY a natural language sentence. DO NOT use the message body to repeat the value if the tool already returned it.
+    - FOR MULTIPLE RESULTS (2+ rows): Your message body MUST be completely empty. Provide NO natural language or explanations.
+    - FOR SINGLE VALUES OR COUNTS (1 row): Provide ONLY a natural language sentence and skip the table.
     - NEVER repeat tool outputs or database schemas in your message.
-    
-    CHINOOK CONTEXT: This is a historical music store database (Chinook). Most records are from 2009-2013. If a user asks for "last year" or "this month", and queries return no data, explain that the database contains historical records and there is no data for the current year.
     
     If the query returns no results, state that clearly in natural language.
     `,
