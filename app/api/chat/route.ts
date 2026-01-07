@@ -3,7 +3,7 @@ import { streamText, tool } from 'ai';
 import { z } from 'zod';
 import { createClient } from '@supabase/supabase-js';
 
-export const maxDuration = 30;
+export const maxDuration = 60;
 
 // Initialize Supabase Client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -202,8 +202,8 @@ export async function POST(req: Request) {
                         }
 
                         // Handle missing RPC function error specifically
-                        if (rpcError.message.includes('Could not find the function')) {
-                            return `Error: The database helper function 'exec_sql' is missing. 
+                        if (rpcError.message.includes('Could not find the function') || rpcError.message.includes('syntax error')) {
+                            return `Error: The database helper function 'exec_sql' is missing or broken. 
                         
                         Please run the following SQL in your Supabase SQL Editor to create it with restricted permissions:
                         
@@ -212,10 +212,13 @@ export async function POST(req: Request) {
                         LANGUAGE plpgsql
                         SECURITY DEFINER
                         AS $$
+                        DECLARE
+                          retval jsonb;
                         BEGIN
                           -- Force the transaction to be read-only for extra safety
                           SET LOCAL TRANSACTION READ ONLY;
-                          RETURN (SELECT jsonb_agg(t) FROM (EXECUTE query) t);
+                          EXECUTE 'SELECT coalesce(jsonb_agg(t), ''[]''::jsonb) FROM (' || query || ') t' INTO retval;
+                          RETURN retval;
                         END;
                         $$;
                         
@@ -232,9 +235,12 @@ export async function POST(req: Request) {
                     LANGUAGE plpgsql
                     SECURITY DEFINER
                     AS $$
+                    DECLARE
+                      retval jsonb;
                     BEGIN
                       SET LOCAL TRANSACTION READ ONLY;
-                      RETURN (SELECT jsonb_agg(t) FROM (EXECUTE query) t);
+                      EXECUTE 'SELECT coalesce(jsonb_agg(t), ''[]''::jsonb) FROM (' || query || ') t' INTO retval;
+                      RETURN retval;
                     END;
                     $$;
                     
