@@ -92,7 +92,7 @@ export function ChatMessage({ role, content, toolInvocations }: MessageProps) {
             </div>
             <div className="flex-1 space-y-2 overflow-hidden min-w-0">
                 {isAssistantWithTools && renderedTools}
-                {content && (
+                {(!hasTable || !isAssistantWithTools) && content && (
                     <div className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-pre:p-0 max-w-none">
                         <ReactMarkdown remarkPlugins={[remarkGfm]}>
                             {content}
