@@ -3,7 +3,7 @@ import { Bot, ShieldCheck, Zap, BarChart3, Lock, FileOutput } from "lucide-react
 
 export default function AboutPage() {
     return (
-        <div className="p-6 md:p-12 max-w-5xl mx-auto space-y-12 pb-24">
+        <div className="h-full overflow-y-auto p-6 md:p-12 max-w-5xl mx-auto space-y-12 pb-24">
             {/* Hero Section */}
             <div className="text-center space-y-4">
                 <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-primary/10 text-primary mb-4">
