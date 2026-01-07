@@ -22,22 +22,48 @@ export default function Chat() {
 
     return (
         <div className="flex flex-col h-full bg-background relative">
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 pb-32">
+            {/* Chat Messages Area */}
+            <div className="flex-1 overflow-y-auto px-4 py-6 md:px-8 space-y-6 pb-32 scroll-smooth">
                 {messages.length === 0 && (
-                    <div className="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-50">
-                        <Terminal className="w-12 h-12" />
-                        <h2 className="text-xl font-semibold">Supabase SQL Agent</h2>
-                        <p className="max-w-md text-sm">
-                            Ask questions about your data. The agent will explore your schema and execute safe, read-only SQL queries.
-                        </p>
+                    <div className="flex flex-col items-center justify-center h-full text-center space-y-6 animate-in fade-in zoom-in duration-500">
+                        <div className="relative">
+                            <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
+                            <div className="relative bg-background p-4 rounded-2xl border border-white/10 shadow-xl">
+                                <Terminal className="w-10 h-10 text-primary" />
+                            </div>
+                        </div>
+                        <div className="space-y-2 max-w-lg">
+                            <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-br from-white to-white/60 bg-clip-text text-transparent">
+                                How can I help you today?
+                            </h2>
+                            <p className="text-muted-foreground text-lg">
+                                Ask questions about your data. The agent will explore your schema and execute safe queries.
+                            </p>
+                        </div>
+
+                        {/* Example chips */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-2xl mt-8">
+                            {[
+                                { title: "List Tables", desc: "Show all public tables" },
+                                { title: "Analyze Data", desc: "Count rows in users" },
+                                { title: "Check Schema", desc: "Describe columns" }
+                            ].map((item, i) => (
+                                <button key={i} onClick={() => handleInputChange({ target: { value: item.title } } as any)} className="p-4 rounded-2xl bg-secondary/30 hover:bg-secondary/60 border border-white/5 text-left transition-all hover:scale-[1.02] group">
+                                    <span className="block font-semibold text-sm mb-1 group-hover:text-primary transition-colors">{item.title}</span>
+                                    <span className="block text-xs text-muted-foreground">{item.desc}</span>
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 )}
 
-
                 {error && (
-                    <div className="p-4 bg-destructive/10 text-destructive text-sm rounded-md max-w-3xl mx-auto">
-                        <p className="font-bold">Error:</p>
-                        <p>{error.message}</p>
+                    <div className="p-4 bg-destructive/10 text-destructive text-sm rounded-2xl border border-destructive/20 max-w-3xl mx-auto flex items-center gap-3">
+                        <div className="w-2 h-2 rounded-full bg-destructive shrink-0" />
+                        <div>
+                            <p className="font-bold">Error</p>
+                            <p className="opacity-90">{error.message}</p>
+                        </div>
                     </div>
                 )}
 
@@ -51,29 +77,44 @@ export default function Chat() {
                 ))}
 
                 {isLoading && messages[messages.length - 1]?.role !== 'assistant' && (
-                    <div className="flex items-center gap-2 p-4 text-sm text-muted-foreground animate-pulse">
-                        <span className="w-2 h-2 rounded-full bg-blue-500 animate-bounce" />
-                        <span>Thinking...</span>
+                    <div className="flex items-center gap-2 max-w-3xl mx-auto p-4 text-sm text-muted-foreground">
+                        <div className="flex space-x-1">
+                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                            <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                        </div>
                     </div>
                 )}
 
                 <div ref={messagesEndRef} />
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm border-t">
-                <form onSubmit={handleSubmit} className="flex gap-2 max-w-4xl mx-auto">
-                    <Input
-                        value={input}
-                        onChange={handleInputChange}
-                        placeholder="Ask a question about your database..."
-                        className="flex-1"
-                        autoFocus
-                    />
-                    <Button type="submit" disabled={isLoading}>
-                        <Send className="w-4 h-4 mr-2" />
-                        Send
-                    </Button>
-                </form>
+            {/* Input Area */}
+            <div className="absolute bottom-6 left-0 right-0 px-4 md:px-8 flex justify-center">
+                <div className="w-full max-w-3xl relative group">
+                    {/* Glow effect */}
+                    <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-blue-500/20 to-purple-500/20 rounded-[2rem] blur opacity-20 group-hover:opacity-40 transition-opacity duration-500" />
+
+                    <form onSubmit={handleSubmit} className="relative flex items-center bg-zinc-900 border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden p-2 pl-6">
+                        <Input
+                            value={input}
+                            onChange={handleInputChange}
+                            placeholder="Type your prompt here..."
+                            className="flex-1 border-0 bg-transparent shadow-none focus-visible:ring-0 text-lg placeholder:text-muted-foreground/50 h-12"
+                            autoFocus
+                        />
+                        <Button
+                            type="submit"
+                            disabled={isLoading || !input.trim()}
+                            className="h-12 w-12 rounded-full shrink-0 ml-2 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100 hover:scale-105"
+                        >
+                            <Send className="w-5 h-5" />
+                        </Button>
+                    </form>
+                    <p className="text-center text-[10px] text-muted-foreground mt-3 opacity-50">
+                        Supabase SQL Agent can make mistakes. Consider checking important information.
+                    </p>
+                </div>
             </div>
         </div>
     );

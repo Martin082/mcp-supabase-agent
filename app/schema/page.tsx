@@ -51,57 +51,62 @@ export default async function SchemaPage() {
     const tableNames = Object.keys(tables).sort();
 
     return (
-        <div className="p-6 md:p-8 space-y-6 overflow-y-auto h-full bg-background/50">
-            <header className="flex items-center gap-3 pb-4 border-b">
-                <div className="p-2 bg-primary/10 rounded-lg">
-                    <TableIcon className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                    <h1 className="text-2xl font-bold tracking-tight">Database Schema</h1>
-                    <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
+        <div className="p-6 md:p-8 space-y-8 overflow-y-auto h-full bg-background/50">
+            {/* Header */}
+            <header className="flex items-start justify-between pb-6 border-b border-white/5">
+                <div className="space-y-2">
+                    <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+                        Database Schema
+                    </h1>
+                    <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
                         This is the schema of the database of this app. Here you can see what type of info it contains so you know what type of questions it can answer.
                     </p>
-                    <p className="text-xs text-muted-foreground mt-2">
-                        Exploring <span className="font-mono text-primary">{tableNames.length}</span> public tables
-                    </p>
+                </div>
+                <div className="px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium flex items-center gap-2">
+                    <Database className="w-3 h-3" />
+                    {tableNames.length} Tables
                 </div>
             </header>
 
+            {/* Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {tableNames.length === 0 ? (
-                    <div className="col-span-full flex flex-col items-center justify-center py-20 border-2 border-dashed rounded-xl bg-muted/20">
-                        <Database className="w-12 h-12 text-muted-foreground mb-4 opacity-50" />
-                        <p className="text-lg font-medium">No tables found</p>
-                        <p className="text-sm text-muted-foreground">Your public schema appears to be empty.</p>
+                    <div className="col-span-full flex flex-col items-center justify-center py-24 border border-dashed border-white/10 rounded-3xl bg-white/[0.02]">
+                        <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-4">
+                            <Database className="w-8 h-8 text-muted-foreground opacity-50" />
+                        </div>
+                        <p className="text-lg font-medium text-foreground">No tables found</p>
+                        <p className="text-sm text-muted-foreground mt-1">Your public schema appears to be empty.</p>
                     </div>
                 ) : (
                     tableNames.map(tableName => (
-                        <Card key={tableName} className="flex flex-col shadow-sm hover:shadow-md transition-shadow duration-200 border-muted/50 overflow-hidden">
-                            <CardHeader className="py-3 px-4 border-b bg-muted/30 flex flex-row items-center justify-between space-y-0">
-                                <CardTitle className="font-mono text-sm font-semibold truncate text-primary" title={tableName}>
+                        <Card key={tableName} className="flex flex-col shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 border-white/5 bg-zinc-900/50 hover:bg-zinc-900/80 group overflow-hidden rounded-3xl backdrop-blur-sm">
+                            <CardHeader className="py-4 px-5 border-b border-white/5 bg-white/[0.02] flex flex-row items-center justify-between space-y-0 group-hover:bg-white/[0.04] transition-colors">
+                                <CardTitle className="font-mono text-sm font-semibold truncate text-foreground group-hover:text-primary transition-colors flex items-center gap-2" title={tableName}>
+                                    <TableIcon className="w-4 h-4 opacity-50" />
                                     {tableName}
                                 </CardTitle>
-                                <span className="text-[10px] uppercase font-bold text-muted-foreground px-1.5 py-0.5 rounded bg-background border">Table</span>
+                                <span className="text-[10px] uppercase font-bold text-muted-foreground px-2 py-1 rounded-md bg-white/5 border border-white/5">Table</span>
                             </CardHeader>
-                            <CardContent className="flex-1 p-0 overflow-hidden">
+                            <CardContent className="flex-1 p-0 overflow-hidden relative">
                                 <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
                                     <table className="w-full text-left text-xs">
-                                        <thead className="sticky top-0 bg-background border-b z-10">
+                                        <thead className="sticky top-0 bg-zinc-900/90 backdrop-blur z-10 border-b border-white/5">
                                             <tr>
-                                                <th className="px-4 py-2 font-medium text-muted-foreground w-1/2">Column</th>
-                                                <th className="px-4 py-2 font-medium text-muted-foreground w-1/2">Type</th>
+                                                <th className="px-5 py-3 font-medium text-muted-foreground w-1/2">Column</th>
+                                                <th className="px-5 py-3 font-medium text-muted-foreground w-1/2 text-right">Type</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-muted/30">
+                                        <tbody className="divide-y divide-white/5">
                                             {tables[tableName].map((col: any) => (
-                                                <tr key={col.column_name} className="hover:bg-muted/10 transition-colors group">
-                                                    <td className="px-4 py-2 font-mono text-foreground/80 group-hover:text-primary transition-colors flex items-center gap-1.5">
-                                                        {col.column_name}
+                                                <tr key={col.column_name} className="hover:bg-white/[0.02] transition-colors group/row">
+                                                    <td className="px-5 py-2.5 font-mono text-foreground/80 group-hover/row:text-primary transition-colors flex items-center gap-2">
                                                         {col.is_nullable === 'NO' && (
-                                                            <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0" title="Required" />
+                                                            <div className="w-1 h-1 rounded-full bg-red-400 shrink-0 shadow-[0_0_8px_rgba(248,113,113,0.5)]" title="Required" />
                                                         )}
+                                                        {col.column_name}
                                                     </td>
-                                                    <td className="px-4 py-2 text-muted-foreground font-mono opacity-80">
+                                                    <td className="px-5 py-2.5 text-muted-foreground font-mono opacity-60 text-right group-hover/row:opacity-100 transition-opacity">
                                                         {col.data_type}
                                                     </td>
                                                 </tr>
@@ -110,8 +115,9 @@ export default async function SchemaPage() {
                                     </table>
                                 </div>
                             </CardContent>
-                            <div className="px-4 py-2 bg-muted/10 border-t text-[10px] text-muted-foreground flex justify-between">
+                            <div className="px-5 py-3 bg-white/[0.02] border-t border-white/5 text-[10px] text-muted-foreground flex justify-between items-center group-hover:bg-white/[0.04] transition-colors">
                                 <span>{tables[tableName].length} columns</span>
+                                <span className="opacity-0 group-hover:opacity-100 transition-opacity text-primary">View Data →</span>
                             </div>
                         </Card>
                     ))
