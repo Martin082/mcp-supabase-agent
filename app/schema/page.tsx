@@ -58,10 +58,21 @@ export default async function SchemaPage() {
                     <h1 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
                         Database Schema
                     </h1>
-                    <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
-                        The database contains information about <strong>{tableNames.join(', ')}</strong>.
-                        Use this schema to understand the available data points and structure for your queries.
-                    </p>
+                    <div className="space-y-4 max-w-3xl">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                            The Chinook database is a practice database that pretends to be an <strong>online music store 🎵</strong>.
+                            It stores fake but realistic data about <strong>Artists</strong> (bands, singers), <strong>Albums</strong>, <strong>Songs</strong> (tracks),
+                            <strong>Customers</strong>, <strong>Invoices</strong> (sales / purchases), and <strong>Employees</strong>.
+                        </p>
+                        <div className="flex flex-wrap gap-2 text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+                            <span className="px-2 py-1 bg-white/5 rounded-md border border-white/5">Analyze Sales</span>
+                            <span className="px-2 py-1 bg-white/5 rounded-md border border-white/5">Track Popularity</span>
+                            <span className="px-2 py-1 bg-white/5 rounded-md border border-white/5">Employee Metrics</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground italic">
+                            Try asking: "Which artist has the most albums?", "Which customers bought the most music?", or "How much money was made last year?"
+                        </p>
+                    </div>
                 </div>
                 <div className="px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium flex items-center gap-2">
                     <Database className="w-3 h-3" />

@@ -23,8 +23,8 @@ export default function RootLayout({
             <body className={cn(inter.className, "h-screen flex overflow-hidden bg-background text-foreground tracking-wide antialiased")}>
                 <ThemeProvider
                     attribute="class"
-                    defaultTheme="dark"
-                    enableSystem={false}
+                    defaultTheme="system"
+                    enableSystem={true}
                     disableTransitionOnChange
                 >
                     <Sidebar />
