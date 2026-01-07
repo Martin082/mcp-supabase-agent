@@ -4,47 +4,39 @@
 
 @layer base {
   :root {
-    /* Base Dark Theme (Default) */
-    --background: 240 10% 4%;
-    /* #09090b - Very dark */
-    --foreground: 0 0% 98%;
-    /* White text */
+    /* Light Theme */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
 
-    --card: 240 10% 6%;
-    /* Slightly lighter than background */
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
 
-    --popover: 240 10% 4%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
 
     --primary: 142 71% 45%;
-    /* Green accent #22c55e */
-    --primary-foreground: 144 100% 11%;
-    /* Dark green text on button */
+    --primary-foreground: 355.7 100% 97.3%;
 
-    --secondary: 240 4% 16%;
-    /* Dark gray for secondary elements */
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
 
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 65%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
 
-    --accent: 240 4% 16%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 4% 16%;
-    --input: 240 4% 16%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
     --ring: 142 71% 45%;
-    /* Green ring */
 
     --radius: 0.75rem;
-    /* More rounded corners */
   }
 
-  /* Force dark mode colors even if system perception is light, or just keep them same */
+  /* Dark Theme */
   .dark {
     --background: 240 10% 4%;
     --foreground: 0 0% 98%;

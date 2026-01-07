@@ -18,7 +18,7 @@ export function MobileShell({ children }: { children: React.ReactNode }) {
 
             {/* Mobile Sidebar Overlay */}
             <div className={cn(
-                "fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden",
+                "fixed inset-0 z-50 bg-black/40 backdrop-blur-sm transition-opacity duration-300 md:hidden",
                 isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
             )} onClick={() => setIsOpen(false)}>
                 <div className={cn(
@@ -40,7 +40,7 @@ export function MobileShell({ children }: { children: React.ReactNode }) {
             {/* Main Content */}
             <div className="flex-1 flex flex-col min-w-0 relative h-full overflow-hidden">
                 {/* Mobile Header Trigger */}
-                <header className="flex h-16 items-center border-b border-white/5 px-4 md:hidden shrink-0">
+                <header className="flex h-16 items-center border-b border-border px-4 md:hidden shrink-0">
                     <Button
                         variant="ghost"
                         size="icon"

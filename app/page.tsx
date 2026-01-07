@@ -41,7 +41,7 @@ export default function Chat() {
                     <div className="flex flex-col items-center justify-center h-full text-center space-y-6 animate-in fade-in zoom-in duration-500">
                         <div className="relative">
                             <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
-                            <div className="relative bg-background p-4 rounded-2xl border border-white/10 shadow-xl">
+                            <div className="relative bg-card p-4 rounded-2xl border border-border shadow-xl">
                                 <Terminal className="w-10 h-10 text-primary" />
                             </div>
                         </div>
@@ -61,7 +61,7 @@ export default function Chat() {
                                 { title: "Analyze Data", desc: "Count rows in users" },
                                 { title: "Check Schema", desc: "Describe columns" }
                             ].map((item, i) => (
-                                <button key={i} onClick={() => handleInputChange({ target: { value: item.title } } as any)} className="p-4 rounded-2xl bg-secondary/30 hover:bg-secondary/60 border border-white/5 text-left transition-all hover:scale-[1.02] group">
+                                <button key={i} onClick={() => handleInputChange({ target: { value: item.title } } as any)} className="p-4 rounded-2xl bg-secondary hover:bg-muted border border-border text-left transition-all hover:scale-[1.02] group">
                                     <span className="block font-semibold text-sm mb-1 group-hover:text-primary transition-colors">{item.title}</span>
                                     <span className="block text-xs text-muted-foreground">{item.desc}</span>
                                 </button>
@@ -108,7 +108,7 @@ export default function Chat() {
                     {/* Glow effect */}
                     <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-blue-500/20 to-purple-500/20 rounded-[2rem] blur opacity-20 group-hover:opacity-40 transition-opacity duration-500" />
 
-                    <form onSubmit={handleSubmit} className="relative flex items-center bg-zinc-900 border border-white/10 rounded-[2rem] shadow-2xl overflow-hidden p-2 pl-6">
+                    <form onSubmit={handleSubmit} className="relative flex items-center bg-card border border-border rounded-[2rem] shadow-2xl overflow-hidden p-2 pl-6">
                         <Input
                             value={input}
                             onChange={handleInputChange}

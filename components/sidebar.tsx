@@ -22,7 +22,7 @@ export function Sidebar() {
 
     return (
         <div className="h-full w-full">
-            <aside className="flex flex-col w-full h-full bg-secondary/50 rounded-3xl border border-white/5 overflow-hidden shadow-2xl">
+            <aside className="flex flex-col w-full h-full bg-secondary border border-border rounded-3xl overflow-hidden shadow-2xl">
                 {/* Sidebar Header */}
                 <div className="p-6 flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -38,8 +38,8 @@ export function Sidebar() {
                     <div className="space-y-2">
                         <p className="text-xs font-semibold text-muted-foreground px-4 uppercase tracking-wider">Apps</p>
                         <Link href="/" className={cn(
-                            "group flex items-center gap-3 px-4 py-4 rounded-2xl transition-all duration-200 border border-transparent hover:border-white/5 relative overflow-hidden",
-                            pathname === "/" ? "bg-background/80 border-white/5" : "bg-background/40 hover:bg-background/80"
+                            "group flex items-center gap-3 px-4 py-4 rounded-2xl transition-all duration-200 border border-transparent hover:border-border relative overflow-hidden",
+                            pathname === "/" ? "bg-background border-border" : "bg-background/40 hover:bg-background/80"
                         )}>
                             <div className={cn(
                                 "w-1 absolute left-0 top-3 bottom-3 bg-blue-500 rounded-r-full transition-opacity",
@@ -55,8 +55,8 @@ export function Sidebar() {
                             </div>
                         </Link>
                         <Link href="/schema" className={cn(
-                            "group flex items-center gap-3 px-4 py-4 rounded-2xl transition-all duration-200 border border-transparent hover:border-white/5 relative overflow-hidden",
-                            pathname === "/schema" ? "bg-background/80 border-white/5" : "bg-background/40 hover:bg-background/80"
+                            "group flex items-center gap-3 px-4 py-4 rounded-2xl transition-all duration-200 border border-transparent hover:border-border relative overflow-hidden",
+                            pathname === "/schema" ? "bg-background border-border" : "bg-background/40 hover:bg-background/80"
                         )}>
                             <div className={cn(
                                 "w-1 absolute left-0 top-3 bottom-3 bg-purple-500 rounded-r-full transition-opacity",
@@ -75,7 +75,7 @@ export function Sidebar() {
                 </nav>
 
                 {/* Footer Controls */}
-                <div className="p-4 mt-auto border-t border-white/5 bg-background/20 space-y-4">
+                <div className="p-4 mt-auto border-t border-border bg-background/20 space-y-4">
                     <div className="flex items-center justify-between px-2">
                         <span className="text-xs text-muted-foreground">Appearance</span>
                         <ModeToggle />
