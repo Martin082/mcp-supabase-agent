@@ -10,7 +10,7 @@ import { Send, Terminal } from 'lucide-react';
 import { useRef, useEffect } from 'react';
 
 export default function Chat() {
-    const { messages, input, handleInputChange, handleSubmit, isLoading, error, stop } = useChat();
+    const { messages, input, handleInputChange, handleSubmit, isLoading, error, stop, append } = useChat();
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const isAtBottom = useRef(true);
 
@@ -61,7 +61,7 @@ export default function Chat() {
                                 { title: "Music Lovers", desc: "Which customers bought the most music?" },
                                 { title: "Yearly Revenue", desc: "How much money was made last year?" }
                             ].map((item, i) => (
-                                <button key={i} onClick={() => handleInputChange({ target: { value: item.desc } } as any)} className="p-4 rounded-2xl bg-secondary hover:bg-muted border border-border text-left transition-all hover:scale-[1.02] group">
+                                <button key={i} onClick={() => append({ role: 'user', content: item.desc })} className="p-4 rounded-2xl bg-secondary hover:bg-muted border border-border text-left transition-all hover:scale-[1.02] group">
                                     <span className="block font-semibold text-sm mb-1 group-hover:text-primary transition-colors">{item.title}</span>
                                     <span className="block text-xs text-muted-foreground">{item.desc}</span>
                                 </button>
