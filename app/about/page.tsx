@@ -3,8 +3,8 @@ import { Bot, ShieldCheck, Zap, BarChart3, Lock, FileOutput } from "lucide-react
 
 export default function AboutPage() {
     return (
-        <div className="h-full overflow-y-auto p-6 md:p-12 max-w-5xl mx-auto space-y-12 pb-24">
-            {/* Hero Section */}
+        <div className="h-full overflow-y-auto no-scrollbar p-6 md:p-12 max-w-5xl mx-auto space-y-12 pb-24">
+            {/* ... hero section omitted for brevity ... */}
             <div className="text-center space-y-4">
                 <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-primary/10 text-primary mb-4">
                     <Bot className="w-10 h-10" />
@@ -88,13 +88,17 @@ export default function AboutPage() {
                                 </div>
                             </div>
                         </div>
+
+                        <p className="text-center text-muted-foreground font-medium pt-4">
+                            ...and anything else your team needs.
+                        </p>
                     </div>
                 </div>
             </div>
 
             <div className="text-center pt-8">
                 <p className="text-sm text-muted-foreground">
-                    Interested in a custom agent for your business? <span className="text-primary font-medium hover:underline cursor-pointer">Contact our team</span>.
+                    Interested in a custom agent for your business? <a href="https://calendly.com/martin-luminastudiomarketing/30min" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">Book a 30-min call</a>.
                 </p>
             </div>
         </div>
