@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { Database, MessageSquare } from "lucide-react";
+import { Database, MessageSquare, Table } from "lucide-react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/mode-toggle";
 
@@ -35,9 +35,13 @@ export default function RootLayout({
                             <span className="font-bold text-lg">SQL Agent</span>
                         </div>
                         <nav className="flex-1 p-4 space-y-2">
-                            <Link href="/" className="flex items-center gap-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-md text-sm font-medium">
+                            <Link href="/" className="flex items-center gap-2 px-4 py-2 hover:bg-muted text-foreground rounded-md text-sm font-medium transition-colors">
                                 <MessageSquare className="w-4 h-4" />
                                 Chat
+                            </Link>
+                            <Link href="/schema" className="flex items-center gap-2 px-4 py-2 hover:bg-muted text-muted-foreground hover:text-foreground rounded-md text-sm font-medium transition-colors">
+                                <Table className="w-4 h-4" />
+                                Schema
                             </Link>
                             {/* Add more links here if needed */}
                         </nav>
