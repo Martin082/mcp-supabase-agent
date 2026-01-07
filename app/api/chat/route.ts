@@ -115,8 +115,25 @@ export async function POST(req: Request) {
                         if (!supabaseUrl || !supabaseKey) return "Error: Credentials missing.";
 
                         const lowerQuery = query.trim().toLowerCase();
+
+                        // Security Check 1: Must be a read-type statement
                         if (!lowerQuery.startsWith('select') && !lowerQuery.startsWith('with') && !lowerQuery.startsWith('values')) {
                             return "Error: Only SELECT statements are allowed.";
+                        }
+
+                        // Security Check 2: No stacked queries (semicolons)
+                        if (query.includes(';')) {
+                            return "Error: Semicolons are not allowed to prevent multiple statements.";
+                        }
+
+                        // Security Check 3: Forbidden keywords (destructive DDL/DML)
+                        const forbiddenKeywords = ['drop', 'delete', 'update', 'insert', 'truncate', 'alter', 'create', 'grant', 'revoke'];
+                        const foundKeyword = forbiddenKeywords.find(keyword =>
+                            new RegExp(`\\b${keyword}\\b`, 'i').test(query)
+                        );
+
+                        if (foundKeyword) {
+                            return `Error: The keyword '${foundKeyword.toUpperCase()}' is forbidden for security reasons.`;
                         }
 
                         const supabase = createClient(supabaseUrl, supabaseKey);
@@ -129,26 +146,8 @@ export async function POST(req: Request) {
                         // Handle missing RPC function error specifically
                         if (rpcError.message.includes('Could not find the function')) {
                             return `Error: The database helper function 'exec_sql' is missing. 
-                            
-                            Please run the following SQL in your Supabase SQL Editor to create it:
-                            
-                            CREATE OR REPLACE FUNCTION exec_sql(query text)
-                            RETURNS jsonb
-                            LANGUAGE plpgsql
-                            SECURITY DEFINER
-                            AS $$
-                            BEGIN
-                              RETURN (SELECT jsonb_agg(t) FROM (EXECUTE query) t);
-                            END;
-                            $$;
-                            
-                            GRANT EXECUTE ON FUNCTION exec_sql(text) TO anon;
-                            GRANT EXECUTE ON FUNCTION exec_sql(text) TO service_role;`;
-                        }
-
-                        return `Error: execution failed. The client capabilities are limited to PostgREST. 
                         
-                        To run raw SQL like '${query}', you must create a Postgres function in your database:
+                        Please run the following SQL in your Supabase SQL Editor to create it with restricted permissions:
                         
                         CREATE OR REPLACE FUNCTION exec_sql(query text)
                         RETURNS jsonb
@@ -156,11 +155,32 @@ export async function POST(req: Request) {
                         SECURITY DEFINER
                         AS $$
                         BEGIN
+                          -- Force the transaction to be read-only for extra safety
+                          SET LOCAL TRANSACTION READ ONLY;
                           RETURN (SELECT jsonb_agg(t) FROM (EXECUTE query) t);
                         END;
                         $$;
                         
-                        RPC Error was: ${rpcError.message}`;
+                        GRANT EXECUTE ON FUNCTION exec_sql(text) TO anon;
+                        GRANT EXECUTE ON FUNCTION exec_sql(text) TO service_role;`;
+                        }
+
+                        return `Error: execution failed. 
+                    
+                    To run raw SQL like '${query}', you must create the security-restricted Postgres function:
+                    
+                    CREATE OR REPLACE FUNCTION exec_sql(query text)
+                    RETURNS jsonb
+                    LANGUAGE plpgsql
+                    SECURITY DEFINER
+                    AS $$
+                    BEGIN
+                      SET LOCAL TRANSACTION READ ONLY;
+                      RETURN (SELECT jsonb_agg(t) FROM (EXECUTE query) t);
+                    END;
+                    $$;
+                    
+                    RPC Error was: ${rpcError.message}`;
                     },
                 }),
             },
