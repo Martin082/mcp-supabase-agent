@@ -12,24 +12,24 @@ export function MobileShell({ children }: { children: React.ReactNode }) {
     return (
         <div className="flex h-full w-full overflow-hidden">
             {/* Desktop Sidebar */}
-            <div className="hidden md:block">
+            <div className="hidden md:block w-80 h-full p-4 shrink-0">
                 <Sidebar />
             </div>
 
             {/* Mobile Sidebar Overlay */}
             <div className={cn(
-                "fixed inset-0 z-50 bg-background/80 backdrop-blur-sm transition-opacity duration-300 md:hidden",
+                "fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity duration-300 md:hidden",
                 isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
             )} onClick={() => setIsOpen(false)}>
                 <div className={cn(
-                    "fixed inset-y-0 left-0 z-50 w-80 bg-background transition-transform duration-300 ease-in-out md:hidden",
+                    "fixed inset-y-0 left-0 z-50 w-80 h-full p-4 transition-transform duration-300 ease-in-out md:hidden",
                     isOpen ? "translate-x-0" : "-translate-x-full"
                 )} onClick={(e) => e.stopPropagation()}>
                     <Sidebar />
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute top-4 right-4 text-muted-foreground"
+                        className="absolute top-6 right-8 text-muted-foreground hover:bg-white/5 rounded-full"
                         onClick={() => setIsOpen(false)}
                     >
                         <X className="h-6 w-6" />
