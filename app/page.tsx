@@ -117,7 +117,7 @@ export default function Chat() {
                             autoFocus
                         />
                         <Button
-                            type="button"
+                            type={isLoading ? "button" : "submit"}
                             onClick={(e) => {
                                 if (isLoading) {
                                     e.preventDefault();
