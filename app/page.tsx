@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@/lib/utils';
 import { useChat } from '@ai-sdk/react';
 import { ChatMessage } from '@/components/chat-message';
 import { Button } from '@/components/ui/button';
@@ -9,7 +10,7 @@ import { Send, Terminal } from 'lucide-react';
 import { useRef, useEffect } from 'react';
 
 export default function Chat() {
-    const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat();
+    const { messages, input, handleInputChange, handleSubmit, isLoading, error, stop } = useChat();
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const isAtBottom = useRef(true);
 
@@ -115,11 +116,24 @@ export default function Chat() {
                             autoFocus
                         />
                         <Button
-                            type="submit"
-                            disabled={isLoading || !input.trim()}
-                            className="h-12 w-12 rounded-full shrink-0 ml-2 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 disabled:opacity-50 disabled:hover:scale-100 hover:scale-105"
+                            type="button"
+                            onClick={(e) => {
+                                if (isLoading) {
+                                    e.preventDefault();
+                                    stop();
+                                }
+                            }}
+                            disabled={!isLoading && !input.trim()}
+                            className={cn(
+                                "h-12 w-12 rounded-full shrink-0 ml-2 transition-all duration-300 hover:scale-105 flex items-center justify-center",
+                                isLoading ? "bg-destructive text-destructive-foreground hover:bg-destructive/90" : "bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:hover:scale-100"
+                            )}
                         >
-                            <Send className="w-5 h-5" />
+                            {isLoading ? (
+                                <div className="h-3 w-3 bg-current rounded-sm animate-in zoom-in duration-200" />
+                            ) : (
+                                <Send className="w-5 h-5" />
+                            )}
                         </Button>
                     </form>
                     <p className="text-center text-[10px] text-muted-foreground mt-3 opacity-50">

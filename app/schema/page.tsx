@@ -59,7 +59,8 @@ export default async function SchemaPage() {
                         Database Schema
                     </h1>
                     <p className="text-sm text-muted-foreground max-w-2xl leading-relaxed">
-                        This is the schema of the database of this app. Here you can see what type of info it contains so you know what type of questions it can answer.
+                        The database contains information about <strong>{tableNames.join(', ')}</strong>.
+                        Use this schema to understand the available data points and structure for your queries.
                     </p>
                 </div>
                 <div className="px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium flex items-center gap-2">
@@ -117,7 +118,6 @@ export default async function SchemaPage() {
                             </CardContent>
                             <div className="px-5 py-3 bg-white/[0.02] border-t border-white/5 text-[10px] text-muted-foreground flex justify-between items-center group-hover:bg-white/[0.04] transition-colors">
                                 <span>{tables[tableName].length} columns</span>
-                                <span className="opacity-0 group-hover:opacity-100 transition-opacity text-primary">View Data →</span>
                             </div>
                         </Card>
                     ))
