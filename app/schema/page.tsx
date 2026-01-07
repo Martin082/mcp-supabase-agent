@@ -21,12 +21,18 @@ export default async function SchemaPage() {
 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Fetch tables and columns
-    const { data: columns, error } = await supabase
-        .from('information_schema.columns')
-        .select('table_name, column_name, data_type, is_nullable')
-        .eq('table_schema', 'public')
-        .order('table_name, ordinal_position');
+    // Fetch tables and columns using RPC to bypass PostgREST limitations on information_schema
+    const { data: result, error } = await supabase.rpc('exec_sql', {
+        query: `
+            SELECT table_name, column_name, data_type, is_nullable 
+            FROM information_schema.columns 
+            WHERE table_schema = 'public' 
+            ORDER BY table_name, ordinal_position;
+        `
+    });
+
+    // Parse the result - exec_sql returns a JSON array of rows directly
+    const columns = result as any[] || [];
 
     if (error) {
         return (
