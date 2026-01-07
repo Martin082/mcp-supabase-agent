@@ -4,9 +4,9 @@ import { Bot, ShieldCheck, Zap, BarChart3, Lock, FileOutput } from "lucide-react
 export default function AboutPage() {
     return (
         <div className="h-full overflow-y-auto pb-24">
-            <div className="p-6 md:p-12 max-w-5xl mx-auto space-y-12 animate-in fade-in zoom-in duration-500">
+            <div className="p-6 md:p-12 max-w-5xl mx-auto space-y-12">
                 {/* Hero Section */}
-                <div className="text-center space-y-4">
+                <div className="text-center space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-700">
                     <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-primary/10 text-primary mb-4">
                         <Bot className="w-10 h-10" />
                     </div>
@@ -19,7 +19,7 @@ export default function AboutPage() {
                 </div>
 
                 {/* How it Works / Core Value */}
-                <div className="grid md:grid-cols-3 gap-6">
+                <div className="grid md:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200 fill-mode-both">
                     <Card className="bg-card/50 backdrop-blur border-border hover:border-primary/50 transition-colors shadow-lg">
                         <CardHeader>
                             <Zap className="w-8 h-8 text-yellow-500 mb-2" />
@@ -50,7 +50,7 @@ export default function AboutPage() {
                 </div>
 
                 {/* Production Capabilities (The Upsell) */}
-                <div className="bg-secondary/30 rounded-[2.5rem] p-8 md:p-12 border border-border/50">
+                <div className="bg-secondary/30 rounded-[2.5rem] p-8 md:p-12 border border-border/50 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300 fill-mode-both">
                     <div className="md:flex items-start gap-12">
                         <div className="flex-1 space-y-6">
                             <h2 className="text-3xl font-bold tracking-tight">Enterprise-Ready Features</h2>
@@ -97,7 +97,7 @@ export default function AboutPage() {
                     </div>
                 </div>
 
-                <div className="text-center pt-8">
+                <div className="text-center pt-8 animate-in fade-in duration-700 delay-500 fill-mode-both">
                     <p className="text-sm text-muted-foreground">
                         Interested in a custom agent for your business? <a href="https://calendly.com/martin-luminastudiomarketing/30min" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">Book a 30-min call</a>.
                     </p>
