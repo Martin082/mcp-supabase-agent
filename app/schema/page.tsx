@@ -84,7 +84,7 @@ export default async function SchemaPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {tableNames.length === 0 ? (
                     <div className="col-span-full flex flex-col items-center justify-center py-24 border border-dashed border-border rounded-3xl bg-secondary/50">
-                        <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mb-4">
+                        <div className="w-16 h-16 rounded-2xl bg-secondary flex items-center justify-center mb-4">
                             <Database className="w-8 h-8 text-muted-foreground opacity-50" />
                         </div>
                         <p className="text-lg font-medium text-foreground">No tables found</p>
@@ -92,24 +92,24 @@ export default async function SchemaPage() {
                     </div>
                 ) : (
                     tableNames.map(tableName => (
-                        <Card key={tableName} className="flex flex-col shadow-xl shadow-black/20 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 border-white/5 bg-zinc-900/50 hover:bg-zinc-900/80 group overflow-hidden rounded-3xl backdrop-blur-sm">
-                            <CardHeader className="py-4 px-5 border-b border-white/5 bg-white/[0.02] flex flex-row items-center justify-between space-y-0 group-hover:bg-white/[0.04] transition-colors">
+                        <Card key={tableName} className="flex flex-col shadow-xl shadow-black/10 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-300 border-border bg-card/50 hover:bg-card group overflow-hidden rounded-3xl backdrop-blur-sm">
+                            <CardHeader className="py-4 px-5 border-b border-border bg-muted/30 flex flex-row items-center justify-between space-y-0 group-hover:bg-muted/50 transition-colors">
                                 <CardTitle className="font-mono text-sm font-semibold truncate text-foreground group-hover:text-primary transition-colors flex items-center gap-2" title={tableName}>
                                     <TableIcon className="w-4 h-4 opacity-50" />
                                     {tableName}
                                 </CardTitle>
-                                <span className="text-[10px] uppercase font-bold text-muted-foreground px-2 py-1 rounded-md bg-white/5 border border-white/5">Table</span>
+                                <span className="text-[10px] uppercase font-bold text-muted-foreground px-2 py-1 rounded-md bg-secondary border border-border">Table</span>
                             </CardHeader>
                             <CardContent className="flex-1 p-0 overflow-hidden relative">
                                 <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
                                     <table className="w-full text-left text-xs">
-                                        <thead className="sticky top-0 bg-zinc-900/90 backdrop-blur z-10 border-b border-white/5">
+                                        <thead className="sticky top-0 bg-card/90 backdrop-blur z-10 border-b border-border">
                                             <tr>
                                                 <th className="px-5 py-3 font-medium text-muted-foreground w-1/2">Column</th>
                                                 <th className="px-5 py-3 font-medium text-muted-foreground w-1/2 text-right">Type</th>
                                             </tr>
                                         </thead>
-                                        <tbody className="divide-y divide-white/5">
+                                        <tbody className="divide-y divide-border">
                                             {tables[tableName].map((col: any) => (
                                                 <tr key={col.column_name} className="hover:bg-white/[0.02] transition-colors group/row">
                                                     <td className="px-5 py-2.5 font-mono text-foreground/80 group-hover/row:text-primary transition-colors flex items-center gap-2">
@@ -127,7 +127,7 @@ export default async function SchemaPage() {
                                     </table>
                                 </div>
                             </CardContent>
-                            <div className="px-5 py-3 bg-white/[0.02] border-t border-white/5 text-[10px] text-muted-foreground flex justify-between items-center group-hover:bg-white/[0.04] transition-colors">
+                            <div className="px-5 py-3 bg-muted/20 border-t border-border text-[10px] text-muted-foreground flex justify-between items-center group-hover:bg-muted/40 transition-colors">
                                 <span>{tables[tableName].length} columns</span>
                             </div>
                         </Card>
