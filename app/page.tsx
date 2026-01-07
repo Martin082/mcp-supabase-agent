@@ -90,13 +90,13 @@ export default function Chat() {
                 ))}
 
                 {isLoading && (
-                    <div className="flex flex-col items-center justify-center gap-3 py-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div className="w-full flex flex-col items-center justify-center gap-3 py-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
                         <div className="flex space-x-1">
                             <div className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
                             <div className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
                             <div className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce"></div>
                         </div>
-                        <span className="text-xs font-medium text-muted-foreground/60 uppercase tracking-[0.2em] ml-1">Thinking</span>
+                        <span className="text-xs font-medium text-muted-foreground/60 uppercase tracking-[0.2em]">Thinking</span>
                     </div>
                 )}
 
