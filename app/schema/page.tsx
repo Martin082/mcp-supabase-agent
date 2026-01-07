@@ -58,7 +58,7 @@ export default async function SchemaPage() {
     const tableNames = Object.keys(tables).sort();
 
     return (
-        <div className="p-6 md:p-8 space-y-8 overflow-y-auto h-full bg-background">
+        <div className="p-6 md:p-8 space-y-8 overflow-y-auto h-full bg-background animate-in fade-in zoom-in duration-500">
             {/* Header */}
             <header className="flex items-start justify-between pb-6 border-b border-border">
                 <div className="space-y-2">
