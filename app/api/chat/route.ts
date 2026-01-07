@@ -83,6 +83,7 @@ export async function POST(req: Request) {
     - FOR MULTIPLE RESULTS (2+ rows): Your message body MUST be completely empty. Provide NO natural language or explanations.
     - FOR SINGLE VALUES OR COUNTS (1 row): Provide ONLY a natural language sentence and skip the table.
     - NEVER repeat tool outputs or database schemas in your message.
+    - EFFICIENCY: NEVER run the same query twice or 'double check' a result with another tool if you already have the data.
     
     If the query returns no results, state that clearly in natural language.
     `,

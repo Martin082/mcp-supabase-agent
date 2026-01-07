@@ -56,31 +56,28 @@ export function ChatMessage({ role, content, toolInvocations }: MessageProps) {
     let hasTable = false;
 
     if (isAssistantWithTools) {
-        // Detect if any execute_sql tool has returned a table-worthy result
-        hasTable = toolInvocations.some((tool: any) => {
-            if (tool.state !== 'result' || tool.toolName !== 'execute_sql') return false;
+        // Find all tool indices that represent a valid table result
+        const tableIndices = toolInvocations.map((tool: any, idx: number) => {
+            if (tool.state !== 'result' || tool.toolName !== 'execute_sql') return -1;
             let data = tool.result;
-            try { if (typeof data === 'string') data = JSON.parse(data); } catch (e) { return false; }
-            return Array.isArray(data) && (data.length > 1 || (data.length === 1 && Object.keys(data[0]).length > 3));
-        });
+            try { if (typeof data === 'string') data = JSON.parse(data); } catch (e) { return -1; }
+            const isTable = Array.isArray(data) && (data.length > 1 || (data.length === 1 && Object.keys(data[0]).length > 3));
+            return isTable ? idx : -1;
+        }).filter(idx => idx !== -1);
 
-        renderedTools = toolInvocations.map((tool: any) => {
-            const isResult = tool.state === 'result';
-            if (!isResult || tool.toolName !== 'execute_sql') return null;
+        hasTable = tableIndices.length > 0;
+        const lastTableIndex = tableIndices.length > 0 ? tableIndices[tableIndices.length - 1] : -1;
+
+        renderedTools = toolInvocations.map((tool: any, idx: number) => {
+            // Only render the tool if it's the last qualifying table result
+            if (idx !== lastTableIndex) return null;
 
             let resultData = tool.result;
             try {
                 if (typeof resultData === 'string') resultData = JSON.parse(resultData);
             } catch (e) { }
 
-            const isList = Array.isArray(resultData) && resultData.length > 1;
-            const isComplexObject = Array.isArray(resultData) && resultData.length === 1 && Object.keys(resultData[0]).length > 3;
-
-            if (isList || isComplexObject) {
-                return <DynamicTable key={tool.toolCallId} data={resultData} />;
-            }
-
-            return null;
+            return <DynamicTable key={tool.toolCallId} data={resultData} />;
         });
     }
 
