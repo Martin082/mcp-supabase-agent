@@ -23,12 +23,7 @@ export default async function SchemaPage() {
 
     // Fetch tables and columns using RPC to bypass PostgREST limitations on information_schema
     const { data: result, error } = await supabase.rpc('exec_sql', {
-        query: `
-            SELECT table_name, column_name, data_type, is_nullable 
-            FROM information_schema.columns 
-            WHERE table_schema = 'public' 
-            ORDER BY table_name, ordinal_position;
-        `
+        query: `SELECT table_name, column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = 'public' ORDER BY table_name, ordinal_position`
     });
 
     // Parse the result - exec_sql returns a JSON array of rows directly
