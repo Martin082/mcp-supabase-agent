@@ -10,20 +10,32 @@ import { useRef, useEffect } from 'react';
 
 export default function Chat() {
     const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat();
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const isAtBottom = useRef(true);
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        const target = e.currentTarget;
+        const atBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 100;
+        isAtBottom.current = atBottom;
     };
 
     useEffect(() => {
-        scrollToBottom();
+        if (isAtBottom.current && scrollContainerRef.current) {
+            scrollContainerRef.current.scrollTo({
+                top: scrollContainerRef.current.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
     }, [messages]);
 
     return (
         <div className="flex flex-col h-full bg-background relative">
             {/* Chat Messages Area */}
-            <div className="flex-1 overflow-y-auto px-4 py-6 md:px-8 space-y-6 pb-32 scroll-smooth">
+            <div
+                ref={scrollContainerRef}
+                onScroll={handleScroll}
+                className="flex-1 overflow-y-auto px-4 py-6 md:px-8 space-y-6 pb-32 scroll-smooth"
+            >
                 {messages.length === 0 && (
                     <div className="flex flex-col items-center justify-center h-full text-center space-y-6 animate-in fade-in zoom-in duration-500">
                         <div className="relative">
@@ -86,7 +98,6 @@ export default function Chat() {
                     </div>
                 )}
 
-                <div ref={messagesEndRef} />
             </div>
 
             {/* Input Area */}
