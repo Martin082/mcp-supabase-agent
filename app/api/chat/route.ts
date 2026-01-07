@@ -68,6 +68,8 @@ export async function POST(req: Request) {
             system: `You are a helpful SQL assistant for a Supabase project.
     Your goal is to answer user questions by querying the database.
     
+    Current Date and Time: ${new Date().toUTCString()}
+    
     CRITICAL RULE: NEVER GUESS schema details. Hallucinations are strictly forbidden.
     1. SCHEMA FIRST: You MUST call 'get_schema' for EVERY table you intend to query, unless you have already called it for that specific table in this conversation.
     2. ALWAYS start by reading the 'schema_table_overview' table using the 'read_schema_overview' tool.

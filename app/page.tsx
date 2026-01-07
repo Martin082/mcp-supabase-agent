@@ -57,11 +57,11 @@ export default function Chat() {
                         {/* Example chips */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-2xl mt-8">
                             {[
-                                { title: "List Tables", desc: "Show all public tables" },
-                                { title: "Analyze Data", desc: "Count rows in users" },
-                                { title: "Check Schema", desc: "Describe columns" }
+                                { title: "Most Albums", desc: "Which artist has the most albums?" },
+                                { title: "Music Lovers", desc: "Which customers bought the most music?" },
+                                { title: "Yearly Revenue", desc: "How much money was made last year?" }
                             ].map((item, i) => (
-                                <button key={i} onClick={() => handleInputChange({ target: { value: item.title } } as any)} className="p-4 rounded-2xl bg-secondary hover:bg-muted border border-border text-left transition-all hover:scale-[1.02] group">
+                                <button key={i} onClick={() => handleInputChange({ target: { value: item.desc } } as any)} className="p-4 rounded-2xl bg-secondary hover:bg-muted border border-border text-left transition-all hover:scale-[1.02] group">
                                     <span className="block font-semibold text-sm mb-1 group-hover:text-primary transition-colors">{item.title}</span>
                                     <span className="block text-xs text-muted-foreground">{item.desc}</span>
                                 </button>
