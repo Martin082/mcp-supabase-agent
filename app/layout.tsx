@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { Sidebar } from "@/components/sidebar";
+import { MobileShell } from "@/components/mobile-shell";
 import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -27,12 +26,9 @@ export default function RootLayout({
                     enableSystem={true}
                     disableTransitionOnChange
                 >
-                    <Sidebar />
-
-                    {/* Main Content */}
-                    <main className="flex-1 flex flex-col h-full overflow-hidden relative">
+                    <MobileShell>
                         {children}
-                    </main>
+                    </MobileShell>
                 </ThemeProvider>
             </body>
         </html>

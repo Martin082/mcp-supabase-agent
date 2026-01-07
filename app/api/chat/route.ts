@@ -16,20 +16,25 @@ export async function POST(req: Request) {
         const result = streamText({
             model: openai('gpt-4o-mini'),
             messages,
-            maxSteps: 5,
+            maxSteps: 10,
             system: `You are a helpful SQL assistant for a Supabase project.
     Your goal is to answer user questions by querying the database.
     
-    RULES:
+    CRITICAL RULE: NEVER GUESS schema details. Hallucinations are strictly forbidden.
+    1. SCHEMA FIRST: You MUST call 'get_schema' for EVERY table you intend to query, unless you have already called it for that specific table in this conversation.
+    2. ALWAYS start by reading the 'schema_table_overview' table using the 'read_schema_overview' tool.
+    
+    DATABASE RULES:
     1. READ ONLY. You are strictly FORBIDDEN from running INSERT, UPDATE, DELETE, DROP, ALTER, TRUNCATE, or any modification commands.
-    2. Only use SELECT statements. NEVER include semicolons (;) at the end of your SQL queries.
-    3. Always start by reading the 'schema_table_overview' table using the 'read_schema_overview' tool to understand the database structure.
-    4. RESPONSE FORMAT: 
-       - CRITICAL: Use EXACTLY ONE format per response. Either a table OR natural language, NEVER BOTH.
-       - For MULTIPLE results from 'execute_sql' (lists/tables), provide NO natural language text. Keep your response message empty.
-       - For SINGLE results from 'execute_sql' (specific values or counts), provide ONLY a natural language sentence.
-       - NEVER repeat tool outputs or database schemas in your message.
-    5. If the query returns no results, state that clearly in natural language.
+    2. Only use SELECT statements. NEVER include semicolons (;) at the end of your SQL queries. ALWAYS append "LIMIT 50" to your queries to prevent large data dumps, unless the user explicitly requests a specific count or limit.
+    
+    RESPONSE FORMAT: 
+    - CRITICAL: Use EXACTLY ONE format per response. Either a table OR natural language, NEVER BOTH.
+    - For MULTIPLE results from 'execute_sql' (lists/tables), provide NO natural language text. Keep your response message empty.
+    - For SINGLE results from 'execute_sql' (specific values or counts), provide ONLY a natural language sentence.
+    - NEVER repeat tool outputs or database schemas in your message.
+    
+    If the query returns no results, state that clearly in natural language.
     `,
             tools: {
                 list_tables: tool({
@@ -82,7 +87,7 @@ export async function POST(req: Request) {
                     },
                 }),
                 get_schema: tool({
-                    description: 'Get the schema definition for a specific table',
+                    description: 'Get the schema definition for a specific table. MANDATORY before querying any table.',
                     parameters: z.object({
                         table: z.string().describe('The table name to get schema for'),
                     }),
@@ -126,8 +131,11 @@ export async function POST(req: Request) {
                             return "Error: Semicolons are not allowed to prevent multiple statements.";
                         }
 
-                        // Security Check 3: Forbidden keywords (destructive DDL/DML)
-                        const forbiddenKeywords = ['drop', 'delete', 'update', 'insert', 'truncate', 'alter', 'create', 'grant', 'revoke'];
+                        // Security Check 3: Forbidden keywords (destructive DDL/DML and resource exhaustion)
+                        const forbiddenKeywords = [
+                            'drop', 'delete', 'update', 'insert', 'truncate', 'alter', 'create', 'grant', 'revoke',
+                            'pg_sleep', 'copy', 'vacuum', 'analyze', 'pg_terminate_backend', 'pg_cancel_backend'
+                        ];
                         const foundKeyword = forbiddenKeywords.find(keyword =>
                             new RegExp(`\\b${keyword}\\b`, 'i').test(query)
                         );

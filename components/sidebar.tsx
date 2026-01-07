@@ -21,7 +21,7 @@ export function Sidebar() {
     };
 
     return (
-        <div className="p-4 hidden md:flex h-full w-80 shrink-0">
+        <div className="h-full w-full">
             <aside className="flex flex-col w-full h-full bg-secondary/50 rounded-3xl border border-white/5 overflow-hidden shadow-2xl">
                 {/* Sidebar Header */}
                 <div className="p-6 flex items-center justify-between">
