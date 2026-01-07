@@ -11,7 +11,21 @@ const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PU
 
 export async function POST(req: Request) {
     try {
-        const { messages } = await req.json();
+        let { messages } = await req.json();
+
+        // --- Message Sanitization Logic ---
+        // Filter out toolInvocations that don't have a result (e.g. if the user stopped the generation mid-call)
+        // to prevent "ToolInvocation must have a result" errors on subsequent requests.
+        messages = messages.map((m: any) => {
+            if (m.toolInvocations) {
+                return {
+                    ...m,
+                    toolInvocations: m.toolInvocations.filter((ti: any) => ti.state === 'result' || 'result' in ti)
+                };
+            }
+            return m;
+        });
+        // --- End Message Sanitization ---
 
         // --- Rate Limiting Logic ---
         const ip = req.headers.get('x-forwarded-for') || '127.0.0.1';
@@ -33,11 +47,11 @@ export async function POST(req: Request) {
 
         if (countError) {
             console.error("Rate limit check error:", countError);
-        } else if (count && count > 5) {
+        } else if (count && count > 10) {
             return new Response(
                 JSON.stringify({
                     error: "Too Many Requests",
-                    message: "You are sending messages too fast. Please wait a minute before trying again."
+                    message: "You are sending messages too fast. Please wait 1 minute before trying again. In the meantime, you can explore the 'Schema View' page to learn more about the database structure, or read through our documentation."
                 }),
                 {
                     status: 429,
