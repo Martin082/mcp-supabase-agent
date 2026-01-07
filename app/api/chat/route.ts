@@ -13,6 +13,40 @@ export async function POST(req: Request) {
     try {
         const { messages } = await req.json();
 
+        // --- Rate Limiting Logic ---
+        const ip = req.headers.get('x-forwarded-for') || '127.0.0.1';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        // 1. Log the request
+        await supabase.from('api_request_logs').insert({
+            ip_address: ip,
+            path: '/api/chat'
+        });
+
+        // 2. Count requests from this IP in the last minute
+        const oneMinuteAgo = new Date(Date.now() - 60 * 1000).toISOString();
+        const { count, error: countError } = await supabase
+            .from('api_request_logs')
+            .select('*', { count: 'exact', head: true })
+            .eq('ip_address', ip)
+            .gte('created_at', oneMinuteAgo);
+
+        if (countError) {
+            console.error("Rate limit check error:", countError);
+        } else if (count && count > 5) {
+            return new Response(
+                JSON.stringify({
+                    error: "Too Many Requests",
+                    message: "You are sending messages too fast. Please wait a minute before trying again."
+                }),
+                {
+                    status: 429,
+                    headers: { 'Content-Type': 'application/json' }
+                }
+            );
+        }
+        // --- End Rate Limiting Logic ---
+
         const result = streamText({
             model: openai('gpt-4o-mini'),
             messages,
