@@ -1,21 +1,50 @@
 "use client";
 
 import Link from "next/link";
-import { Database, MessageSquare, Table } from "lucide-react";
+import { Database, MessageSquare, Table, Info } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
 import { useRouter, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
+const NAV_ITEMS = [
+    {
+        href: "/",
+        label: "Chat Interface",
+        desc: "Query your database",
+        icon: MessageSquare,
+        colorClass: "bg-blue-500"
+    },
+    {
+        href: "/schema",
+        label: "Schema View",
+        desc: "Explore tables & columns",
+        icon: Table,
+        colorClass: "bg-purple-500"
+    },
+    {
+        href: "/about",
+        label: "About this Agent",
+        desc: "Capabilities & Features",
+        icon: Info,
+        colorClass: "bg-orange-500"
+    }
+];
+
+import { useChatReset } from "@/components/chat-reset-context";
+
+// ... (NAV_ITEMS remains unchanged)
+
 export function Sidebar() {
     const router = useRouter();
     const pathname = usePathname();
+    const { triggerReset } = useChatReset();
 
     const handleNewChat = () => {
-        // Since useChat state is local to the page, 
-        // redirecting to home or refreshing home resets it.
+        // If on home page, trigger soft reset.
         if (pathname === '/') {
-            window.location.reload();
+            triggerReset();
         } else {
+            // If elsewhere, navigate to home (which spawns a fresh chat)
             router.push('/');
         }
     };
@@ -37,40 +66,35 @@ export function Sidebar() {
                 <nav className="flex-1 px-4 space-y-4 overflow-y-auto">
                     <div className="space-y-2">
                         <p className="text-xs font-semibold text-muted-foreground px-4 uppercase tracking-wider">Apps</p>
-                        <Link href="/" className={cn(
-                            "group flex items-center gap-3 px-4 py-4 rounded-2xl transition-all duration-200 border border-transparent hover:border-border relative overflow-hidden",
-                            pathname === "/" ? "bg-background border-border" : "bg-background/40 hover:bg-background/80"
-                        )}>
-                            <div className={cn(
-                                "w-1 absolute left-0 top-3 bottom-3 bg-blue-500 rounded-r-full transition-opacity",
-                                pathname === "/" ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-                            )} />
-                            <MessageSquare className={cn(
-                                "w-5 h-5 transition-colors",
-                                pathname === "/" ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
-                            )} />
-                            <div className="flex flex-col">
-                                <span className="font-medium text-sm">Chat Interface</span>
-                                <span className="text-[10px] text-muted-foreground truncate">Query your database</span>
-                            </div>
-                        </Link>
-                        <Link href="/schema" className={cn(
-                            "group flex items-center gap-3 px-4 py-4 rounded-2xl transition-all duration-200 border border-transparent hover:border-border relative overflow-hidden",
-                            pathname === "/schema" ? "bg-background border-border" : "bg-background/40 hover:bg-background/80"
-                        )}>
-                            <div className={cn(
-                                "w-1 absolute left-0 top-3 bottom-3 bg-purple-500 rounded-r-full transition-opacity",
-                                pathname === "/schema" ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-                            )} />
-                            <Table className={cn(
-                                "w-5 h-5 transition-colors",
-                                pathname === "/schema" ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
-                            )} />
-                            <div className="flex flex-col">
-                                <span className="font-medium text-sm">Schema View</span>
-                                <span className="text-[10px] text-muted-foreground truncate">Explore tables & columns</span>
-                            </div>
-                        </Link>
+                        {NAV_ITEMS.map((item) => {
+                            const isActive = pathname === item.href;
+                            const Icon = item.icon;
+
+                            return (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    className={cn(
+                                        "group flex items-center gap-3 px-4 py-4 rounded-2xl transition-all duration-200 border border-transparent hover:border-border relative overflow-hidden",
+                                        isActive ? "bg-background border-border" : "bg-background/40 hover:bg-background/80"
+                                    )}
+                                >
+                                    <div className={cn(
+                                        "w-1 absolute left-0 top-3 bottom-3 rounded-r-full transition-opacity",
+                                        item.colorClass,
+                                        isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                                    )} />
+                                    <Icon className={cn(
+                                        "w-5 h-5 transition-colors",
+                                        isActive ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
+                                    )} />
+                                    <div className="flex flex-col">
+                                        <span className="font-medium text-sm">{item.label}</span>
+                                        <span className="text-[10px] text-muted-foreground truncate">{item.desc}</span>
+                                    </div>
+                                </Link>
+                            );
+                        })}
                     </div>
                 </nav>
 

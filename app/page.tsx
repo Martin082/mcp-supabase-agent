@@ -9,16 +9,26 @@ import { Card } from '@/components/ui/card';
 import { Send, Terminal } from 'lucide-react';
 import { useRef, useEffect } from 'react';
 
+import { useChatReset } from '@/components/chat-reset-context';
+
 export default function Chat() {
-    const { messages, input, handleInputChange, handleSubmit, isLoading, error, stop, append } = useChat();
+    const { messages, input, handleInputChange, handleSubmit, isLoading, error, stop, append, setMessages } = useChat();
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const isAtBottom = useRef(true);
+    const { resetKey } = useChatReset();
 
     const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const target = e.currentTarget;
         const atBottom = target.scrollHeight - target.scrollTop - target.clientHeight < 100;
         isAtBottom.current = atBottom;
     };
+
+    // Reset chat when resetKey changes (triggered from Sidebar)
+    useEffect(() => {
+        if (resetKey > 0) {
+            setMessages([]);
+        }
+    }, [resetKey, setMessages]);
 
     useEffect(() => {
         if (isAtBottom.current && scrollContainerRef.current) {

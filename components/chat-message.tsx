@@ -10,13 +10,15 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
+import { ToolInvocation } from 'ai';
+
 export interface MessageProps {
     role: 'user' | 'assistant' | 'system' | 'data';
     content: string;
-    toolInvocations?: any[];
+    toolInvocations?: ToolInvocation[];
 }
 
-function DynamicTable({ data }: { data: any[] }) {
+function DynamicTable({ data }: { data: Record<string, unknown>[] }) {
     if (!Array.isArray(data) || data.length === 0) return null;
 
     const headers = Object.keys(data[0]);
@@ -55,9 +57,9 @@ export function ChatMessage({ role, content, toolInvocations }: MessageProps) {
     let renderedTools = null;
     let hasTable = false;
 
-    if (isAssistantWithTools) {
+    if (isAssistantWithTools && toolInvocations) {
         // Find all tool indices that represent a valid table result
-        const tableIndices = toolInvocations.map((tool: any, idx: number) => {
+        const tableIndices = toolInvocations.map((tool, idx) => {
             if (tool.state !== 'result' || tool.toolName !== 'execute_sql') return -1;
             let data = tool.result;
             try { if (typeof data === 'string') data = JSON.parse(data); } catch (e) { return -1; }
@@ -68,11 +70,11 @@ export function ChatMessage({ role, content, toolInvocations }: MessageProps) {
         hasTable = tableIndices.length > 0;
         const lastTableIndex = tableIndices.length > 0 ? tableIndices[tableIndices.length - 1] : -1;
 
-        renderedTools = toolInvocations.map((tool: any, idx: number) => {
+        renderedTools = toolInvocations.map((tool, idx) => {
             // Only render the tool if it's the last qualifying table result
             if (idx !== lastTableIndex) return null;
 
-            let resultData = tool.result;
+            let resultData = tool.state === 'result' ? tool.result : null;
             try {
                 if (typeof resultData === 'string') resultData = JSON.parse(resultData);
             } catch (e) { }

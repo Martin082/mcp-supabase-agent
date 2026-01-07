@@ -26,8 +26,15 @@ export default async function SchemaPage() {
         query: `SELECT table_name, column_name, data_type, is_nullable FROM information_schema.columns WHERE table_schema = 'public' ORDER BY table_name, ordinal_position`
     });
 
+    interface ColumnDefinition {
+        table_name: string;
+        column_name: string;
+        data_type: string;
+        is_nullable: string;
+    }
+
     // Parse the result - exec_sql returns a JSON array of rows directly
-    const columns = result as any[] || [];
+    const columns = (result as unknown as ColumnDefinition[]) || [];
 
     if (error) {
         return (
@@ -40,8 +47,8 @@ export default async function SchemaPage() {
     }
 
     // Group by table
-    const tables: Record<string, typeof columns> = {};
-    columns?.forEach(col => {
+    const tables: Record<string, ColumnDefinition[]> = {};
+    columns?.forEach((col) => {
         if (!tables[col.table_name]) {
             tables[col.table_name] = [];
         }

@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { MobileShell } from "@/components/mobile-shell";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ChatResetProvider } from "@/components/chat-reset-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,9 +27,11 @@ export default function RootLayout({
                     enableSystem={true}
                     disableTransitionOnChange
                 >
-                    <MobileShell>
-                        {children}
-                    </MobileShell>
+                    <ChatResetProvider>
+                        <MobileShell>
+                            {children}
+                        </MobileShell>
+                    </ChatResetProvider>
                 </ThemeProvider>
             </body>
         </html>
