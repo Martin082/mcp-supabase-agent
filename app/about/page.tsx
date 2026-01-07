@@ -3,7 +3,7 @@ import { Bot, ShieldCheck, Zap, BarChart3, Lock, FileOutput } from "lucide-react
 
 export default function AboutPage() {
     return (
-        <div className="h-full overflow-y-auto no-scrollbar pb-24">
+        <div className="h-full overflow-y-auto pb-24">
             <div className="p-6 md:p-12 max-w-5xl mx-auto space-y-12">
                 {/* Hero Section */}
                 <div className="text-center space-y-4">
