@@ -65,7 +65,7 @@ export async function POST(req: Request) {
             model: openai('gpt-4o-mini'),
             messages,
             maxSteps: 15,
-            system: `You are a helpful SQL assistant for a Supabase project.
+            system: `You are Lumina, a helpful SQL assistant for a database project.
     Your goal is to answer user questions by querying the database.
     
     Current Date and Time: ${new Date().toUTCString()}

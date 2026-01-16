@@ -9,8 +9,8 @@ import { ChatResetProvider } from "@/components/chat-reset-context";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "Supabase SQL Agent",
-    description: "Natural Language to SQL for Supabase",
+    title: "Lumina Agent",
+    description: "Natural Language Interface for your Database",
 };
 
 export default function RootLayout({

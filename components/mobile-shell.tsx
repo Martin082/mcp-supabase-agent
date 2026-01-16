@@ -49,7 +49,7 @@ export function MobileShell({ children }: { children: React.ReactNode }) {
                     >
                         <Menu className="h-6 w-6" />
                     </Button>
-                    <span className="font-bold text-lg tracking-tight">Supabase Agent</span>
+                    <span className="font-bold text-lg tracking-tight">Lumina Agent</span>
                 </header>
 
                 <main className="flex-1 overflow-hidden relative">

@@ -148,7 +148,7 @@ export default function Chat() {
                         </Button>
                     </form>
                     <p className="text-center text-[10px] text-muted-foreground mt-3 opacity-50">
-                        Supabase SQL Agent can make mistakes. Consider checking important information.
+                        Lumina Agent can make mistakes. Consider checking important information.
                     </p>
                 </div>
             </div>
