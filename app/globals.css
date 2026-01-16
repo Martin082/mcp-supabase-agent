@@ -7,31 +7,31 @@
     /* Light Theme - Optimized for White Background */
     --background: 0 0% 100%;
     /* White */
-    --foreground: 216 11% 18%;
-    /* #292d33 (Dark Text) */
+    --foreground: 0 0% 0%;
+    /* Pure Black */
 
     --card: 0 0% 100%;
-    --card-foreground: 216 11% 18%;
+    --card-foreground: 0 0% 0%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 216 11% 18%;
+    --popover-foreground: 0 0% 0%;
 
-    --primary: 216 11% 18%;
-    /* #292d33 (Dark Buttons) */
+    --primary: 0 0% 0%;
+    /* Pure Black Buttons */
     --primary-foreground: 140 63% 80%;
     /* #adedc2 (Green Text on Button) */
 
     --secondary: 202 88% 67%;
     /* #63bff4 (Blue) */
-    --secondary-foreground: 216 11% 18%;
+    --secondary-foreground: 0 0% 0%;
 
     --muted: 201 13% 90%;
     /* Lighter version of #c6cfd4 */
-    --muted-foreground: 216 11% 40%;
+    --muted-foreground: 0 0% 40%;
 
     --accent: 140 63% 80%;
     /* #adedc2 (Green) */
-    --accent-foreground: 216 11% 18%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
@@ -39,7 +39,7 @@
     --border: 201 13% 80%;
     /* #c6cfd4 */
     --input: 201 13% 80%;
-    --ring: 216 11% 18%;
+    --ring: 0 0% 0%;
 
     --radius: 0.75rem;
   }
