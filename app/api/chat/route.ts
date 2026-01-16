@@ -94,7 +94,7 @@ export async function POST(req: Request) {
                     execute: async () => {
                         console.log("Executing tool: list_tables");
                         if (!supabaseUrl || !supabaseKey) {
-                            return "Error: Supabase credentials missing.";
+                            return "Error: Database credentials missing.";
                         }
                         const supabase = createClient(supabaseUrl, supabaseKey);
 
