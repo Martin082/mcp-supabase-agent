@@ -126,7 +126,7 @@ export async function POST(req: Request) {
                     parameters: z.object({}),
                     execute: async () => {
                         console.log("Executing tool: read_schema_overview");
-                        if (!supabaseUrl || !supabaseKey) return "Error: Credentials missing.";
+                        if (!supabaseUrl || !supabaseKey) return "Error: Database credentials missing.";
                         const supabase = createClient(supabaseUrl, supabaseKey);
 
                         const { data, error } = await supabase.from('schema_table_overview').select('*');

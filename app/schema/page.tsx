@@ -14,7 +14,7 @@ export default async function SchemaPage() {
             <div className="p-8 text-destructive flex flex-col items-center gap-4">
                 <Database className="w-12 h-12" />
                 <h2 className="text-xl font-semibold">Configuration Error</h2>
-                <p>Missing Supabase credentials. Please check your environment variables.</p>
+                <p>Missing database credentials. Please check your environment variables.</p>
             </div>
         );
     }
