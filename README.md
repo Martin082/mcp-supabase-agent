@@ -1,4 +1,4 @@
-# Supabase SQL Agent
+# Lumina Agent
 
 A premium Next.js dashboard that enables natural language querying of a Supabase database.
 
