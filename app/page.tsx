@@ -56,7 +56,7 @@ export default function Chat() {
                             </div>
                         </div>
                         <div className="space-y-2 max-w-lg">
-                            <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-br from-white to-white/60 bg-clip-text text-transparent">
+                            <h2 className="text-3xl font-bold tracking-tight text-foreground">
                                 How can I help you today?
                             </h2>
                             <p className="text-muted-foreground text-lg">
@@ -71,9 +71,9 @@ export default function Chat() {
                                 { title: "Music Lovers", desc: "Which customers bought the most music?" },
                                 { title: "Yearly Revenue", desc: "How much money was made last year?" }
                             ].map((item, i) => (
-                                <button key={i} onClick={() => append({ role: 'user', content: item.desc })} className="p-4 rounded-2xl bg-secondary hover:bg-muted border border-border text-left transition-all hover:scale-[1.02] group">
-                                    <span className="block font-semibold text-sm mb-1 group-hover:text-primary transition-colors">{item.title}</span>
-                                    <span className="block text-xs text-muted-foreground">{item.desc}</span>
+                                <button key={i} onClick={() => append({ role: 'user', content: item.desc })} className="p-4 rounded-2xl bg-secondary hover:bg-muted border border-border text-left transition-all hover:scale-[1.02] group dark:text-white">
+                                    <span className="block font-semibold text-sm mb-1 group-hover:text-primary transition-colors dark:text-white">{item.title}</span>
+                                    <span className="block text-xs text-muted-foreground dark:text-white">{item.desc}</span>
                                 </button>
                             ))}
                         </div>

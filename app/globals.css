@@ -49,26 +49,9 @@
     --background: 216 11% 18%;
     /* #292d33 */
     --foreground: 201 13% 80%;
-    /* #c6cfd4 (Light Gray Text) */
-
-    --card: 216 11% 22%;
-    /* Slightly lighter than BG */
-    --card-foreground: 201 13% 80%;
-
-    --popover: 216 11% 18%;
-    --popover-foreground: 201 13% 80%;
-
-    --primary: 140 63% 80%;
-    /* #adedc2 (Green Buttons) */
-    --primary-foreground: 216 11% 18%;
-    /* Dark text on button */
-
-    --secondary: 202 88% 67%;
-    /* #63bff4 (Blue) */
-    --secondary-foreground: 216 11% 18%;
-
-    --muted: 216 11% 25%;
+    /* Light gray for dark mode */
     --muted-foreground: 201 13% 60%;
+    /* Slightly darker gray for muted text */
 
     --accent: 305 79% 60%;
     /* #e949db (Pink/Magenta accent) */

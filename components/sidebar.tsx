@@ -65,7 +65,7 @@ export function Sidebar() {
                 {/* Navigation */}
                 <nav className="flex-1 px-4 space-y-4 overflow-y-auto">
                     <div className="space-y-2">
-                        <p className="text-xs font-semibold text-muted-foreground px-4 uppercase tracking-wider">Apps</p>
+                        <p className="text-xs font-semibold text-white px-4 uppercase tracking-wider">Apps</p>
                         {NAV_ITEMS.map((item) => {
                             const isActive = pathname === item.href;
                             const Icon = item.icon;
@@ -89,8 +89,8 @@ export function Sidebar() {
                                         isActive ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
                                     )} />
                                     <div className="flex flex-col">
-                                        <span className="font-medium text-sm">{item.label}</span>
-                                        <span className="text-[10px] text-muted-foreground truncate">{item.desc}</span>
+                                        <span className="font-medium text-sm text-foreground dark:text-white">{item.label}</span>
+                                        <span className="text-[10px] text-muted-foreground dark:text-white truncate">{item.desc}</span>
                                     </div>
                                 </Link>
                             );
@@ -101,7 +101,7 @@ export function Sidebar() {
                 {/* Footer Controls */}
                 <div className="p-4 mt-auto border-t border-border bg-background/20 space-y-4">
                     <div className="flex items-center justify-between px-2">
-                        <span className="text-xs text-muted-foreground">Appearance</span>
+                        <span className="text-xs text-muted-foreground dark:text-white">Appearance</span>
                         <ModeToggle />
                     </div>
                     <button
