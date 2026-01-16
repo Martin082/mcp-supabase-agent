@@ -144,7 +144,7 @@ export async function POST(req: Request) {
                     }),
                     execute: async ({ table }) => {
                         console.log("Executing tool: get_schema", table);
-                        if (!supabaseUrl || !supabaseKey) return "Error: Credentials missing.";
+                        if (!supabaseUrl || !supabaseKey) return "Error: Database credentials missing.";
                         const supabase = createClient(supabaseUrl, supabaseKey);
 
                         const { data, error } = await supabase.from('information_schema.columns')
@@ -168,7 +168,7 @@ export async function POST(req: Request) {
                     }),
                     execute: async ({ query }) => {
                         console.log("Executing tool: execute_sql", query);
-                        if (!supabaseUrl || !supabaseKey) return "Error: Credentials missing.";
+                        if (!supabaseUrl || !supabaseKey) return "Error: Database credentials missing.";
 
                         // Security Check 1: Must be a read-type statement
                         // Remove comments and leading whitespace for accurate check
