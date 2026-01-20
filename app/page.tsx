@@ -13,6 +13,7 @@ import { useChatReset } from '@/components/chat-reset-context';
 
 export default function Chat() {
     const { messages, input, handleInputChange, handleSubmit, isLoading, error, stop, append, setMessages } = useChat();
+    const lastMessage = messages[messages.length - 1];
     const scrollContainerRef = useRef<HTMLDivElement>(null);
     const isAtBottom = useRef(true);
     const { resetKey } = useChatReset();
@@ -99,7 +100,7 @@ export default function Chat() {
                     />
                 ))}
 
-                {isLoading && (
+                {isLoading && (!lastMessage || lastMessage.role !== 'assistant' || lastMessage.content.length === 0) && (
                     <div className="w-full flex flex-col items-center justify-center gap-3 py-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
                         <div className="flex space-x-1">
                             <div className="w-2.5 h-2.5 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>

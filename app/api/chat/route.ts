@@ -69,6 +69,7 @@ export async function POST(req: Request) {
     Your goal is to answer user questions by querying the database.
     
     Current Date and Time: ${new Date().toUTCString()}
+    DATE FORMAT: ALWAYS use DD-MM-YYYY for all dates in your natural language responses.
     
     CRITICAL RULE: NEVER GUESS schema details. Hallucinations are strictly forbidden.
     1. SCHEMA FIRST: ALWAYS start by calling the 'read_schema_overview' tool. This provides a compact overview of all tables and their columns.
