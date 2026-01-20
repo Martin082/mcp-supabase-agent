@@ -18,6 +18,26 @@ export interface MessageProps {
     toolInvocations?: ToolInvocation[];
 }
 
+function formatValue(value: unknown): string {
+    if (value === null || value === undefined) return '';
+    const str = String(value);
+
+    // Basic check for ISO-like date patterns (YYYY-MM-DD or YYYY-MM-DDTHH:mm:SS...)
+    const isoDatePattern = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}(?::?\d{2})?)?)?$/;
+
+    if (typeof value === 'string' && isoDatePattern.test(str)) {
+        const date = new Date(str);
+        if (!isNaN(date.getTime())) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}-${month}-${year}`;
+        }
+    }
+
+    return str;
+}
+
 function DynamicTable({ data }: { data: Record<string, unknown>[] }) {
     if (!Array.isArray(data) || data.length === 0) return null;
 
@@ -40,7 +60,7 @@ function DynamicTable({ data }: { data: Record<string, unknown>[] }) {
                         <TableRow key={i} className="hover:bg-muted/30 transition-colors">
                             {headers.map((header) => (
                                 <TableCell key={`${i}-${header}`} className="py-2 px-4">
-                                    {String(row[header] ?? '')}
+                                    {formatValue(row[header])}
                                 </TableCell>
                             ))}
                         </TableRow>
