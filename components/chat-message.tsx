@@ -74,7 +74,15 @@ function DynamicTable({ data }: { data: Record<string, unknown>[] }) {
         if (tableRef.current === null) return;
 
         try {
-            const dataUrl = await toPng(tableRef.current, { cacheBust: true, backgroundColor: 'var(--background)' });
+            // Get the current background color from the body to ensure correct theme capture
+            const bgColor = window.getComputedStyle(document.body).backgroundColor;
+            const dataUrl = await toPng(tableRef.current, {
+                cacheBust: true,
+                backgroundColor: bgColor,
+                style: {
+                    color: window.getComputedStyle(document.body).color // Ensure text color is also captured correctly
+                }
+            });
             const link = document.createElement('a');
             link.download = 'table-screenshot.png';
             link.href = dataUrl;
