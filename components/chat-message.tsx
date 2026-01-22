@@ -1,6 +1,12 @@
+'use client';
+
 import { cn } from "@/lib/utils";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { Download, Camera } from 'lucide-react';
+import { toPng } from 'html-to-image';
+import { Button } from '@/components/ui/button';
+import { useRef } from 'react';
 import {
     Table,
     TableBody,
@@ -39,34 +45,88 @@ function formatValue(value: unknown): string {
 }
 
 function DynamicTable({ data }: { data: Record<string, unknown>[] }) {
+    const tableRef = useRef<HTMLDivElement>(null);
+
     if (!Array.isArray(data) || data.length === 0) return null;
 
     const headers = Object.keys(data[0]);
+    const MAX_ROWS = 50;
+    const displayData = data.slice(0, MAX_ROWS);
+    const remainingRows = data.length - MAX_ROWS;
+
+    const downloadCSV = () => {
+        const csvContent = "data:text/csv;charset=utf-8,"
+            + [headers.join(','), ...data.map(row => headers.map(header => {
+                const val = row[header];
+                return typeof val === 'string' ? `"${val.replace(/"/g, '""')}"` : val;
+            }).join(','))].join('\n');
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "data.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const takeScreenshot = async () => {
+        if (tableRef.current === null) return;
+
+        try {
+            const dataUrl = await toPng(tableRef.current, { cacheBust: true, backgroundColor: 'var(--background)' });
+            const link = document.createElement('a');
+            link.download = 'table-screenshot.png';
+            link.href = dataUrl;
+            link.click();
+        } catch (err) {
+            console.error('Failed to take screenshot:', err);
+        }
+    };
 
     return (
-        <div className="rounded-md border my-4 overflow-hidden">
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        {headers.map((header) => (
-                            <TableHead key={header} className="capitalize py-2 px-4 whitespace-nowrap bg-muted/50">
-                                {header.replace(/_/g, ' ')}
-                            </TableHead>
-                        ))}
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {data.map((row, i) => (
-                        <TableRow key={i} className="hover:bg-muted/30 transition-colors">
+        <div className="my-4 space-y-2">
+            <div className="flex justify-end gap-2">
+                <Button variant="outline" size="sm" onClick={takeScreenshot} className="h-8">
+                    <Camera className="w-3.5 h-3.5 mr-2" />
+                    Screenshot
+                </Button>
+                <Button variant="outline" size="sm" onClick={downloadCSV} className="h-8">
+                    <Download className="w-3.5 h-3.5 mr-2" />
+                    CSV
+                </Button>
+            </div>
+
+            <div ref={tableRef} className="rounded-md border overflow-hidden bg-background">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
                             {headers.map((header) => (
-                                <TableCell key={`${i}-${header}`} className="py-2 px-4">
-                                    {formatValue(row[header])}
-                                </TableCell>
+                                <TableHead key={header} className="capitalize py-2 px-4 whitespace-nowrap bg-muted/50">
+                                    {header.replace(/_/g, ' ')}
+                                </TableHead>
                             ))}
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHeader>
+                    <TableBody>
+                        {displayData.map((row, i) => (
+                            <TableRow key={i} className="hover:bg-muted/30 transition-colors">
+                                {headers.map((header) => (
+                                    <TableCell key={`${i}-${header}`} className="py-2 px-4">
+                                        {formatValue(row[header])}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
+
+            {remainingRows > 0 && (
+                <div className="text-sm text-muted-foreground text-center italic">
+                    The complete table contains {remainingRows} more rows. Download CSV to view complete data.
+                </div>
+            )}
         </div>
     );
 }
