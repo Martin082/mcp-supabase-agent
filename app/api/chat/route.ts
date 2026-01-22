@@ -77,7 +77,7 @@ export async function POST(req: Request) {
     
     DATABASE RULES:
     1. READ ONLY. You are strictly FORBIDDEN from running INSERT, UPDATE, DELETE, DROP, ALTER, TRUNCATE, or any modification commands.
-    2. Only use SELECT statements. NEVER include semicolons (;) at the end of your SQL queries. ALWAYS append "LIMIT 50" to your queries to prevent large data dumps, unless the user explicitly requests a specific count or limit.
+    2. Only use SELECT statements. NEVER include semicolons (;) at the end of your SQL queries. ALWAYS append "LIMIT 1000" to your queries to prevent large data dumps but allow for CSV exports, unless the user explicitly requests a specific count or limit.
     
     RESPONSE FORMAT: 
     - CRITICAL: Use EXACTLY ONE format per response. Either a table OR natural language, NEVER BOTH.
